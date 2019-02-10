@@ -1,2 +1,2 @@
 # tracker
-Tracking your routines and tasks.
+Track your routines and tasks.
