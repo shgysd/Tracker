@@ -2,7 +2,7 @@ import React from 'react';
 import { AsyncStorage, StyleSheet, Button, View, TextInput, StatusBar, Text } from 'react-native';
 import * as firebase from 'firebase';
 
-import db from '../../configs/firebase';
+import db from '../configs/firebase';
 
 export default class User extends React.Component {
   state = {

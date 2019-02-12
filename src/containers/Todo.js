@@ -2,10 +2,10 @@ import React from 'react';
 import { StyleSheet, AsyncStorage, View, StatusBar, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import db from '../../configs/firebase';
+import db from '../configs/firebase';
 
-import CreateList from '../modals/CreateList';
-import RenderTask from '../lists/RenderTask';
+import CreateList from '../components/modals/CreateList';
+import RenderTask from '../components/lists/RenderTask';
 
 export default class Todo extends React.Component {
   state = {

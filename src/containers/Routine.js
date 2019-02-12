@@ -2,64 +2,66 @@ import React from 'react';
 import { AsyncStorage, StyleSheet, Text, View, FlatList, StatusBar, Alert, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
+import { connect } from 'react-redux';
+import { increment, decrement, setInputModalVisible, setDetailModalVisible, addRoutine } from '../actions/routines'
 
-import db from '../../configs/firebase';
+import db from '../configs/firebase';
 
-import AddRoutine from '../modals/AddRoutine';
-import RenderItem from '../lists/RenderRoutine';
-import Detail from '../modals/Detail';
+import AddRoutine from '../components/modals/AddRoutine';
+import RenderItem from '../components/lists/RenderRoutine';
+import Detail from '../components/modals/Detail';
 
-export default class Routine extends React.Component {
+class Routine extends React.Component {
   state = {
     routines: [],
-    modalVisible: false,
-    detailVisible: false,
+    inputModalVisible: false,
+    detailModalVisible: false,
     selectedRoutine: null
   };
 
-  setModalVisible = (visible) => {
-    this.setState({modalVisible: visible});
+  setInputModalVisible = (visible) => {
+    this.props.setInputModalVisible(visible);
   }
 
-  setDetailVisible = (visible, routine) => {
-    this.setState({detailVisible: visible, selectedRoutine: routine});
+  setDetailModalVisible = (visible, routine) => {
+    this.props.setDetailModalVisible(visible, routine);
   }
 
   setRoutine = async (name, count) => {
-    const uid = await AsyncStorage.getItem('uid');
-    const routines = this.state.routines.slice();
-    const createdAt = moment().format();
+    // const uid = await AsyncStorage.getItem('uid');
+    // const routines = this.state.routines.slice();
+    // const createdAt = moment().format();
 
-    if(uid) {
-      db.ref('Users/' + uid + '/routines/').push({
-        name: name,
-        count: count,
-        progress: [], 
-        key: Math.random().toString(),
-        createdAt: createdAt
-      }).then(routine => {
-        console.log(routine)
-        routines.push({name: name, count: count, progress: [], key: routine.key, createdAt: createdAt});
-        this.setState({routines: routines}, () => {
-          AsyncStorage.setItem('routines', JSON.stringify(routines)).then(() => {
-            db.ref('Users/' + uid + '/routines/').child(routine.key).set({name: name, count: count, progress: [], key: routine.key, createdAt: createdAt});
-          }).catch((err) => {
-            console.log(err);
-          });
-        });
-      }).catch(err => {
-        console.log(err);
-      });
-    } else {
-      routines.push({name: name, count: count, progress: [], key: Math.random().toString(), createdAt: createdAt});
-      this.setState({routines: routines}, () => {
-        AsyncStorage.setItem('routines', JSON.stringify(routines)).catch((err) => {
-          console.log(err);
-        });
-      });
-    }
+    // if(uid) {
+    //   db.ref('Users/' + uid + '/routines/').push({
+    //     name: name,
+    //     count: count,
+    //     progress: [], 
+    //     key: Math.random().toString(),
+    //     createdAt: createdAt
+    //   }).then(routine => {
+    //     routines.push({name: name, count: count, progress: [], key: routine.key, createdAt: createdAt});
+    //     this.setState({routines: routines}, () => {
+    //       AsyncStorage.setItem('routines', JSON.stringify(routines)).then(() => {
+    //         db.ref('Users/' + uid + '/routines/').child(routine.key).set({name: name, count: count, progress: [], key: routine.key, createdAt: createdAt});
+    //       }).catch((err) => {
+    //         console.log(err);
+    //       });
+    //     });
+    //   }).catch(err => {
+    //     console.log(err);
+    //   });
+    // } else {
+    //   routines.push({name: name, count: count, progress: [], key: Math.random().toString(), createdAt: createdAt});
+    //   this.setState({routines: routines}, () => {
+    //     AsyncStorage.setItem('routines', JSON.stringify(routines)).catch((err) => {
+    //       console.log(err);
+    //     });
+    //   });
+    // }
 
-    this.setModalVisible(false);
+    this.props.addRoutine(name, count);
+    this.props.setInputModalVisible(false);
   }
 
   deleteRoutine = async (routine, visible) => {
@@ -83,7 +85,7 @@ export default class Routine extends React.Component {
             });
           });
 
-          this.setDetailVisible(visible)
+          this.setDetailModalVisible(visible)
         }}
       ]
     );
@@ -123,7 +125,6 @@ export default class Routine extends React.Component {
   async componentWillMount() {
     const uid = await AsyncStorage.getItem('uid');
     await AsyncStorage.getItem('routines').then(routines => {
-      console.log(routines)
       if(routines) {
         this.setState({ routines: JSON.parse(routines) });
       } else {
@@ -163,7 +164,7 @@ export default class Routine extends React.Component {
         <View style={styles.headerContainer}>
           <View style={styles.headerLeftContainer}>
             <TouchableOpacity>
-              <Ionicons style={styles.icon} name="md-add" size={28} color="white" onPress={() => { this.setModalVisible(!this.state.modalVisible); }} />
+              <Ionicons style={styles.icon} name="md-add" size={28} color="white" onPress={() => { this.setInputModalVisible(!this.state.inputModalVisible); }} />
             </TouchableOpacity>
           </View>
           <View style={styles.headerRightContainer}>
@@ -173,14 +174,14 @@ export default class Routine extends React.Component {
         <View style={styles.mainContainer}>
           <FlatList
             style={styles.listContainer}
-            data={this.state.routines}
+            data={this.props.routines}
             renderItem={(routine) => (
-              <RenderItem routine={routine} handleProgress={this.setProgress} handleShowDetail={this.setDetailVisible} visible={this.detailVisible} />
+              <RenderItem routine={routine} handleProgress={this.setProgress} handleShowDetail={this.setDetailModalVisible} visible={this.detailModalVisible} />
             )}
           />
         </View>
-        <AddRoutine visible={this.state.modalVisible} handleVisible={this.setModalVisible} createRoutine={this.setRoutine} />
-        <Detail visible={this.state.detailVisible} handleShowDetail={this.setDetailVisible} selectedRoutine={this.state.selectedRoutine} deleteRoutine={this.deleteRoutine} />
+        <AddRoutine visible={this.props.inputModalVisible} handleVisible={this.setInputModalVisible} createRoutine={this.setRoutine} />
+        <Detail visible={this.props.detailModalVisible} handleShowDetail={this.setDetailModalVisible} selectedRoutine={this.props.selectedRoutine} deleteRoutine={this.deleteRoutine} />
       </View>
     );
   }
@@ -224,3 +225,19 @@ const styles = StyleSheet.create({
     marginLeft: 12
   }
 });
+
+const mapStateToProps = state => {
+return ({
+  routines: state.routines.routines,
+  inputModalVisible: state.routines.inputModalVisible,
+  detailModalVisible: state.routines.detailModalVisible,
+  selectedRoutine: state.routines.selectedRoutine
+});
+}
+const mapDispatchToProps = dispatch => ({
+  addRoutine: (name, count) => dispatch(addRoutine(name, count)),
+  setInputModalVisible: (visible) => dispatch(setInputModalVisible(visible)),
+  setDetailModalVisible: (visible, routine) => dispatch(setDetailModalVisible(visible, routine)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Routine)
