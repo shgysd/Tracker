@@ -28,38 +28,6 @@ class Routine extends React.Component {
   }
 
   setRoutine = async (name, count) => {
-    // const uid = await AsyncStorage.getItem('uid');
-    // const routines = this.state.routines.slice();
-    // const createdAt = moment().format();
-
-    // if(uid) {
-    //   db.ref('Users/' + uid + '/routines/').push({
-    //     name: name,
-    //     count: count,
-    //     progress: [], 
-    //     key: Math.random().toString(),
-    //     createdAt: createdAt
-    //   }).then(routine => {
-    //     routines.push({name: name, count: count, progress: [], key: routine.key, createdAt: createdAt});
-    //     this.setState({routines: routines}, () => {
-    //       AsyncStorage.setItem('routines', JSON.stringify(routines)).then(() => {
-    //         db.ref('Users/' + uid + '/routines/').child(routine.key).set({name: name, count: count, progress: [], key: routine.key, createdAt: createdAt});
-    //       }).catch((err) => {
-    //         console.log(err);
-    //       });
-    //     });
-    //   }).catch(err => {
-    //     console.log(err);
-    //   });
-    // } else {
-    //   routines.push({name: name, count: count, progress: [], key: Math.random().toString(), createdAt: createdAt});
-    //   this.setState({routines: routines}, () => {
-    //     AsyncStorage.setItem('routines', JSON.stringify(routines)).catch((err) => {
-    //       console.log(err);
-    //     });
-    //   });
-    // }
-
     this.props.addRoutine(name, count);
     this.props.setInputModalVisible(false);
   }
