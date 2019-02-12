@@ -3,38 +3,35 @@ import { AsyncStorage } from 'react-native';
 import { successAddRoutine } from '../actions/routines';
 import moment from 'moment';
 
+import db from '../configs/firebase';
+
 const setRoutine = async (name, count) => {
   try {
-    await AsyncStorage.removeItem('routines');
+    const uid = await AsyncStorage.getItem('uid');
     const item = await AsyncStorage.getItem('routines');
-    if(item) {
-      const routines = JSON.parse(item);
-      routines.push({
-        name: name,
-        count: count,
-        progress: [],
-        key: Math.random().toString(),
-        createdAt: moment().format()
-      });
+    const routines = item ? JSON.stringify(item) : [];
+    const routine = {
+      name: name,
+      count: count,
+      progress: [],
+      key: Math.random().toString(),
+      createdAt: moment().format()
+    };
+
+    if(uid) {
+      db.ref('Users/' + uid + '/routines/').push(routine).then(routine => {
+        routine.key = routine.key;
+        routines.push(routine);
+      })
       await AsyncStorage.setItem('routines', JSON.stringify(routines));
-      const payload = await AsyncStorage.getItem('routines');
-      return { payload: JSON.parse(payload) };
+      return { payload: routine };
     } else {
-      const routines = [];
-      const routine = {
-        name: name,
-        count: count,
-        progress: [],
-        key: Math.random().toString(),
-        createdAt: moment().format()
-      };
       routines.push(routine);
       await AsyncStorage.setItem('routines', JSON.stringify(routines));
       return { payload: routine };
     }
   } catch (error) {
     console.log(error);
-    return { error }
   }
 }
 
