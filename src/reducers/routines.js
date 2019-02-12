@@ -1,4 +1,4 @@
-import { INCREMENT, DECREMENT, SET_INPUT_MODAL_VISIBLE, SET_DETAIL_MODAL_VISIBLE, ADD_ROUTINE, SET_ROUTINE_STORAGE, SUCCESS_ADD_ROUTINE } from '../consistants/actionTypes'
+import { INCREMENT, DECREMENT, SET_INPUT_MODAL_VISIBLE, SET_DETAIL_MODAL_VISIBLE, ADD_ROUTINE, DELETE_ROUTINE, SUCCESS_ADD_ROUTINE } from '../consistants/actionTypes'
 import moment from 'moment';
 
 const initialState = {
@@ -34,17 +34,8 @@ const reducer = (state = initialState, action) => {
       }
     case ADD_ROUTINE:
       return state;
-    case SET_ROUTINE_STORAGE:
-      return {
-        ...state,
-        routines: state.routines.concat({
-          name: action.name,
-          count: action.count,
-          progress: [],
-          key: Math.random().toString(),
-          createdAt: moment().format()
-        })
-      }
+    case DELETE_ROUTINE:
+      return state
     case SUCCESS_ADD_ROUTINE:
       return {
         ...state,

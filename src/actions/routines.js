@@ -1,4 +1,4 @@
-import { INCREMENT, DECREMENT, SET_INPUT_MODAL_VISIBLE, SET_DETAIL_MODAL_VISIBLE, ADD_ROUTINE, SET_ROUTINE_STORAGE, SUCCESS_ADD_ROUTINE } from '../consistants/actionTypes'
+import { INCREMENT, DECREMENT, SET_INPUT_MODAL_VISIBLE, SET_DETAIL_MODAL_VISIBLE, ADD_ROUTINE, DELETE_ROUTINE, SUCCESS_ADD_ROUTINE } from '../consistants/actionTypes'
 
 export const increment = () => {
   return {
@@ -35,11 +35,11 @@ export const addRoutine = (name, count) => {
   };
 }
 
-export const setRoutineStorage = (name, count) => {
+export const deleteRoutine = (routine, visible) => {
   return {
-    type: SET_ROUTINE_STORAGE,
-    name: name,
-    count: count
+    type: ADD_ROUTINE,
+    routine: routine,
+    visible: visible
   };
 }
 
