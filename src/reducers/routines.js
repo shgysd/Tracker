@@ -1,4 +1,4 @@
-import { INCREMENT, DECREMENT, SET_INPUT_MODAL_VISIBLE, SET_DETAIL_MODAL_VISIBLE, ADD_ROUTINE, DELETE_ROUTINE, SUCCESS_ADD_ROUTINE } from '../consistants/actionTypes'
+import { SET_INPUT_MODAL_VISIBLE, SET_DETAIL_MODAL_VISIBLE, ADD_ROUTINE, DELETE_ROUTINE, SUCCESS_ADD_ROUTINE, SUCCESS_DELETE_ROUTINE } from '../consistants/actionTypes'
 import moment from 'moment';
 
 const initialState = {
@@ -11,16 +11,6 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case INCREMENT:
-      return {
-        ...state,
-        counter: state.counter + 1
-      }
-    case DECREMENT:
-      return {
-        ...state,
-        counter: state.counter - 1
-      }
     case SET_INPUT_MODAL_VISIBLE:
       return {
         ...state,
@@ -35,11 +25,20 @@ const reducer = (state = initialState, action) => {
     case ADD_ROUTINE:
       return state;
     case DELETE_ROUTINE:
+    
       return state
     case SUCCESS_ADD_ROUTINE:
       return {
         ...state,
         routines: state.routines.concat(action.routine)
+      }
+    case SUCCESS_DELETE_ROUTINE:
+      return {
+        ...state,
+        detailModalVisible: false,
+        routines: state.routines.filter(val => {
+          return val.key !== action.routine.key
+        })
       }
     default:
       return state;

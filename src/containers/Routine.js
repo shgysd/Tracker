@@ -3,7 +3,7 @@ import { AsyncStorage, StyleSheet, Text, View, FlatList, StatusBar, Alert, Touch
 import { Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { increment, decrement, setInputModalVisible, setDetailModalVisible, addRoutine } from '../actions/routines'
+import { setInputModalVisible, setDetailModalVisible, addRoutine, deleteRoutine } from '../actions/routines'
 
 import db from '../configs/firebase';
 
@@ -33,30 +33,8 @@ class Routine extends React.Component {
   }
 
   deleteRoutine = async (routine, visible) => {
-    const uid = await AsyncStorage.getItem('uid');
-    Alert.alert(
-      'Alert Title',
-      'Would you really like to delete?',
-      [
-        {text: 'NO', onPress: () => {}},
-        {text: 'YES', onPress: () => {
-          const routines = this.state.routines.slice();
-          const newRoutines = routines.filter(item => {
-            return item.key !== routine.key
-          });
-      
-          this.setState({routines: newRoutines}, () => {
-            AsyncStorage.setItem('routines', JSON.stringify(newRoutines)).then(() => {
-              if(uid) {
-                db.ref('Users/' + uid + '/routines/').child(routine.key).remove();
-              }
-            });
-          });
-
-          this.setDetailModalVisible(visible)
-        }}
-      ]
-    );
+    this.props.deleteRoutine(routine);
+    this.props.setInputModalVisible(visible);
   }
 
   setProgress = async (key, date) => {
@@ -204,6 +182,7 @@ return ({
 }
 const mapDispatchToProps = dispatch => ({
   addRoutine: (name, count) => dispatch(addRoutine(name, count)),
+  deleteRoutine: (routine) => dispatch(deleteRoutine(routine)),
   setInputModalVisible: (visible) => dispatch(setInputModalVisible(visible)),
   setDetailModalVisible: (visible, routine) => dispatch(setDetailModalVisible(visible, routine)),
 });
