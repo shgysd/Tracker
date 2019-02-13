@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { setInputModalVisible, setDetailModalVisible, addRoutine, deleteRoutine, updateProgress, getRoutineFromCache } from '../actions/routines'
 
 import AddRoutine from '../components/modals/AddRoutine';
-import RenderItem from '../components/lists/RenderRoutine';
+import RenderRoutine from '../components/flatlists/RenderRoutine';
 import Detail from '../components/modals/Detail';
 
 class Routine extends React.Component {
@@ -43,7 +43,7 @@ class Routine extends React.Component {
     this.props.getRoutineFromCache();
   }
 
-  render() {
+  getDateView = () => {
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const date = [];
     for(let i = 0; i < 5;i++) {
@@ -54,6 +54,9 @@ class Routine extends React.Component {
         </View>
       )
     }
+  }
+
+  render() {
     return (
       <View style={styles.homeContainer}>
         <View style={styles.headerContainer}>
@@ -63,7 +66,7 @@ class Routine extends React.Component {
             </TouchableOpacity>
           </View>
           <View style={styles.headerRightContainer}>
-            {date}
+            {this.getDateView()}
           </View>
         </View>
         <View style={styles.mainContainer}>
@@ -71,7 +74,7 @@ class Routine extends React.Component {
             style={styles.listContainer}
             data={this.props.routines}
             renderItem={(routine) => (
-              <RenderItem routine={routine} handleProgress={this.setProgress} handleShowDetail={this.setDetailModalVisible} visible={this.detailModalVisible} />
+              <RenderRoutine routine={routine} handleProgress={this.setProgress} handleShowDetail={this.setDetailModalVisible} visible={this.detailModalVisible} />
             )}
           />
         </View>

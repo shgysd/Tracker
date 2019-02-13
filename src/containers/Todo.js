@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import db from '../configs/firebase';
 
 import CreateList from '../components/modals/CreateList';
-import RenderTask from '../components/lists/RenderTask';
+import RenderTask from '../components/flatlists/RenderTask';
 
 export default class Todo extends React.Component {
   state = {
