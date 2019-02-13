@@ -1,11 +1,9 @@
 import React from 'react';
-import { AsyncStorage, StyleSheet, Text, View, FlatList, StatusBar, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList, StatusBar, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { setInputModalVisible, setDetailModalVisible, addRoutine, deleteRoutine } from '../actions/routines'
-
-import db from '../configs/firebase';
+import { setInputModalVisible, setDetailModalVisible, addRoutine, deleteRoutine, updateProgress, getRoutineFromCache } from '../actions/routines'
 
 import AddRoutine from '../components/modals/AddRoutine';
 import RenderItem from '../components/lists/RenderRoutine';
@@ -27,71 +25,22 @@ class Routine extends React.Component {
     this.props.setDetailModalVisible(visible, routine);
   }
 
-  setRoutine = async (name, count) => {
+  setRoutine = (name, count) => {
     this.props.addRoutine(name, count);
     this.props.setInputModalVisible(false);
   }
 
-  deleteRoutine = async (routine, visible) => {
+  deleteRoutine = (routine, visible) => {
     this.props.deleteRoutine(routine);
     this.props.setInputModalVisible(visible);
   }
 
-  setProgress = async (key, date) => {
-    const uid = await AsyncStorage.getItem('uid');
-    let newRoutine = null;
-    const routines = this.state.routines.map(routine =>{
-      if(routine.key === key) {
-        const progress = routine.progress.find(item => {
-          if(item.date === date) {
-            if(0 < item.count) {
-              item.count -= 1;
-            } else {
-              item.count = routine.count;
-            }
-          }
-          return item.date === date;
-        });
-
-        if(!progress) {
-          routine.progress.push({ date: date, count: routine.count - 1 });
-        };
-
-        newRoutine = routine;
-      }
-      return routine;
-    });
-    this.setState({routines: routines}, () => {
-      AsyncStorage.setItem('routines', JSON.stringify(routines));
-      db.ref('Users/' + uid + '/routines/').child(newRoutine.key).set(newRoutine);
-    });
+  setProgress = (key, date) => {
+    this.props.updateProgress(key, date, this.props.routines);
   }
 
-
-  async componentWillMount() {
-    const uid = await AsyncStorage.getItem('uid');
-    await AsyncStorage.getItem('routines').then(routines => {
-      if(routines) {
-        this.setState({ routines: JSON.parse(routines) });
-      } else {
-        const routines = this.state.routines.slice();
-        db.ref('Users/' + uid + '/routines/').on('value', (snapshot) => {
-          snapshot.forEach((val) => {
-            const progress = val.child('count').progress ? val.child('count').progress : [];
-            routines.push({
-              name: val.child('name').val(),
-              count: val.child('count').val(),
-              progress: progress, 
-              key: val.child('key').val(),
-              createdAt: val.child('createdAt').val()
-            })
-          })
-          this.setState({routines: routines}, () => {
-            AsyncStorage.setItem('routines', JSON.stringify(routines));
-          });
-        });
-      }
-    });
+  componentWillMount() {
+    this.props.getRoutineFromCache();
   }
 
   render() {
@@ -142,19 +91,6 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     flexDirection: "row"
   },
-  homeContainer: {
-    flex: 1,
-    paddingTop: StatusBar.currentHeight
-  },
-  mainContainer: {
-    backgroundColor: "#222",
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  listContainer: {
-    width: "100%"
-  },
   headerLeftContainer: {
     flex: 1,
     flexDirection: "row",
@@ -169,7 +105,20 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginLeft: 12
-  }
+  },
+  homeContainer: {
+    flex: 1,
+    paddingTop: StatusBar.currentHeight
+  },
+  mainContainer: {
+    backgroundColor: "#222",
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  listContainer: {
+    width: "100%"
+  },
 });
 
 const mapStateToProps = state => {
@@ -183,6 +132,8 @@ return ({
 const mapDispatchToProps = dispatch => ({
   addRoutine: (name, count) => dispatch(addRoutine(name, count)),
   deleteRoutine: (routine) => dispatch(deleteRoutine(routine)),
+  updateProgress: (key, date, routine) => dispatch(updateProgress(key, date, routine)),
+  getRoutineFromCache: () => dispatch(getRoutineFromCache()),
   setInputModalVisible: (visible) => dispatch(setInputModalVisible(visible)),
   setDetailModalVisible: (visible, routine) => dispatch(setDetailModalVisible(visible, routine)),
 });

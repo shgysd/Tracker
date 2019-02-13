@@ -1,4 +1,15 @@
-import { SET_INPUT_MODAL_VISIBLE, SET_DETAIL_MODAL_VISIBLE, ADD_ROUTINE, DELETE_ROUTINE, SUCCESS_ADD_ROUTINE, SUCCESS_DELETE_ROUTINE } from '../consistants/actionTypes'
+import {
+  SET_INPUT_MODAL_VISIBLE,
+  SET_DETAIL_MODAL_VISIBLE,
+  ADD_ROUTINE,
+  DELETE_ROUTINE,
+  UPDATE_PROGRESS,
+  GET_ROUTINE_FROM_CACHE,
+  SUCCESS_ADD_ROUTINE,
+  SUCCESS_DELETE_ROUTINE,
+  SUCCESS_UPDATE_PROGRESS,
+  SUCCESS_GET_ROUTINE
+} from '../consistants/actionTypes'
 
 export const increment = () => {
   return {
@@ -42,6 +53,20 @@ export const deleteRoutine = (routine) => {
   };
 }
 
+export const updateProgress = (key, date, routines) => {
+  return {
+    type: UPDATE_PROGRESS,
+    key: key,
+    date: date,routines
+  };
+}
+
+export const getRoutineFromCache = () => {
+  return {
+    type: GET_ROUTINE_FROM_CACHE,
+  };
+}
+
 export const successAddRoutine = (routine) => {
   return {
     type: SUCCESS_ADD_ROUTINE,
@@ -53,5 +78,19 @@ export const successDeleteRoutine = (routine) => {
   return {
     type: SUCCESS_DELETE_ROUTINE,
     routine: routine
+  };
+}
+
+export const successUpdateProgress = (routines) => {
+  return {
+    type: SUCCESS_UPDATE_PROGRESS,
+    routines: routines
+  };
+}
+
+export const successGetRoutine = (routines) => {
+  return {
+    type: SUCCESS_GET_ROUTINE,
+    routines: routines
   };
 }

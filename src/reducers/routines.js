@@ -1,5 +1,15 @@
-import { SET_INPUT_MODAL_VISIBLE, SET_DETAIL_MODAL_VISIBLE, ADD_ROUTINE, DELETE_ROUTINE, SUCCESS_ADD_ROUTINE, SUCCESS_DELETE_ROUTINE } from '../consistants/actionTypes'
-import moment from 'moment';
+import {
+  SET_INPUT_MODAL_VISIBLE,
+  SET_DETAIL_MODAL_VISIBLE,
+  ADD_ROUTINE,
+  DELETE_ROUTINE,
+  UPDATE_PROGRESS,
+  GET_ROUTINE_FROM_CACHE,
+  SUCCESS_ADD_ROUTINE,
+  SUCCESS_DELETE_ROUTINE,
+  SUCCESS_GET_ROUTINE,
+  SUCCESS_UPDATE_PROGRESS
+} from '../consistants/actionTypes'
 
 const initialState = {
   counter: 0,
@@ -25,7 +35,10 @@ const reducer = (state = initialState, action) => {
     case ADD_ROUTINE:
       return state;
     case DELETE_ROUTINE:
-    
+      return state
+    case UPDATE_PROGRESS:
+      return state
+    case GET_ROUTINE_FROM_CACHE:
       return state
     case SUCCESS_ADD_ROUTINE:
       return {
@@ -39,6 +52,16 @@ const reducer = (state = initialState, action) => {
         routines: state.routines.filter(val => {
           return val.key !== action.routine.key
         })
+      }
+    case SUCCESS_UPDATE_PROGRESS:
+      return {
+        ...state,
+        routines: action.routines
+      }
+    case SUCCESS_GET_ROUTINE:
+      return {
+        ...state,
+        routines: action.routines
       }
     default:
       return state;
