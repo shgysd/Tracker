@@ -23,7 +23,6 @@ const progressScreen = (props) => {
   const progress = [];
 
   for(let i = 0; i < 5; i++) {
-    const countText = count ? count : <Entypo name="check" size={20} color="#f92" />;
     let date = moment().subtract(i, 'days').format('MM-DD-YYYY');
     let count = props.routine.item.count;
 
@@ -32,6 +31,8 @@ const progressScreen = (props) => {
         count = progress.count;
       };
     });
+
+    const countText = count ? count : <Entypo name="check" size={20} color="#f92" />;
 
     progress.push(
       <View key={i} style={styles.numberContainer}>

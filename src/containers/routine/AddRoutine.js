@@ -1,65 +1,51 @@
 import React from 'react';
 import { StyleSheet, Text, View, Modal, TouchableWithoutFeedback, TextInput, Button, Picker } from 'react-native';
+import { connect } from 'react-redux';
 
-export default class AddRoutine extends React.Component {
+import { changeRoutineTitle, changeDefaultCount, submitAddRoutine } from '../../actions/routines';
+
+class AddRoutine extends React.Component {
 
   state = {
     name: "",
     count: 1
   }
 
-  handleCloseModal = () => {
-    this.props.handleVisible(!this.props.visible);
-  }
-
   handleCreateRoutine = () => {
-    this.props.createRoutine(this.state.name, this.state.count);
-    this.setState({
-      name: "",
-      count: 1
-    });
+    this.props.createRoutine(this.props.name, this.props.count);
+    this.props.submitAddRoutine();
   }
 
-  handleChangeText = (value) => {
-    this.setState({
-      name: value
-    });
-  };
-
-  handleChangeCount = (value) => {
-    this.setState({
-      count: value
-    });
-  };
+  getPickerItems = (count) => {
+    const items = [];
+    for(let i = 1; i <= count; i++) {
+      items.push(<Picker.Item key={i} label={i.toString()} value={i} />);
+    }
+    return items;
+  }
 
   render() {
     return (
-      <Modal visible={this.props.visible} onRequestClose={this.handleCloseModal} transparent={true} animationType="slide">
-        <TouchableWithoutFeedback onPress={ this.handleCloseModal }>
+      <Modal visible={this.props.visible} onRequestClose={() => this.props.handleVisible(!this.props.visible)} transparent={true} animationType="slide">
+        <TouchableWithoutFeedback onPress={ () => this.props.handleVisible(!this.props.visible) }>
           <View style={styles.modalContainer} >
             <TouchableWithoutFeedback onPress={() => {}}>
               <View style={styles.innerContainer}>
                 <Text style={styles.title}>Create Routine</Text>
                 <TextInput
-                  value={this.state.name}
+                  value={this.props.name}
                   placeholder="Name"
                   style={styles.textInput}
-                  onChangeText={this.handleChangeText}
+                  onChangeText={(value) => this.props.changeRoutineTitle(value)}
                 />
                 <View style={styles.pickerContainer}>
                   <Text style={{flex: 1,color: "#eee", fontSize: 18, paddingLeft: 4, paddingTop: 12}}>Daily Count</Text>
                   <Picker
-                    selectedValue={this.state.count}
+                    selectedValue={this.props.count}
                     style={{flex: 1, color: "#eee", alignItems: "center"}}
-                    onValueChange={this.handleChangeCount}
+                    onValueChange={(value) => this.props.changeDefaultCount(value)}
                   >
-                    <Picker.Item label="1" value="1" />
-                    <Picker.Item label="2" value="2" />
-                    <Picker.Item label="3" value="3" />
-                    <Picker.Item label="4" value="4" />
-                    <Picker.Item label="5" value="5" />
-                    <Picker.Item label="6" value="6" />
-                    <Picker.Item label="7" value="7" />
+                    {this.getPickerItems(10)}
                   </Picker>
                 </View>
                 <Button style={styles.save} color="#222" title="SAVE" onPress={ this.handleCreateRoutine } />
@@ -108,3 +94,17 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   }
 });
+
+const mapStateToProps = state => {
+  return ({
+    name: state.routines.name,
+    count: state.routines.count,
+  });
+}
+const mapDispatchToProps = dispatch => ({
+  changeRoutineTitle: (name) => dispatch(changeRoutineTitle(name)),
+  changeDefaultCount: (count) => dispatch(changeDefaultCount(count)),
+  submitAddRoutine: () => dispatch(submitAddRoutine()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddRoutine)

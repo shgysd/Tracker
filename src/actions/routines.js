@@ -8,7 +8,10 @@ import {
   SUCCESS_ADD_ROUTINE,
   SUCCESS_DELETE_ROUTINE,
   SUCCESS_UPDATE_PROGRESS,
-  SUCCESS_GET_ROUTINE
+  SUCCESS_GET_ROUTINE,
+  CHANGE_ROUTINE_TITLE,
+  CHANGE_DEFAULT_COUNT,
+  SUBMIT_ADD_ROUTINE
 } from '../consistants/actionTypes'
 
 export const increment = () => {
@@ -92,5 +95,25 @@ export const successGetRoutine = (routines) => {
   return {
     type: SUCCESS_GET_ROUTINE,
     routines: routines
+  };
+}
+
+export const changeRoutineTitle = (name) => {
+  return {
+    type: CHANGE_ROUTINE_TITLE,
+    name: name
+  };
+}
+
+export const changeDefaultCount = (count) => {
+  return {
+    type: CHANGE_DEFAULT_COUNT,
+    count: count
+  };
+}
+
+export const submitAddRoutine = () => {
+  return {
+    type: SUBMIT_ADD_ROUTINE
   };
 }

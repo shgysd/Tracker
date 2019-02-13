@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 import { AntDesign, Entypo } from '@expo/vector-icons';
 
-import Routine from '../../containers/Routine';
+import Routine from '../../containers/routine';
 import Todo from '../../containers/Todo';
 import User from '../../containers/User';
 

@@ -8,7 +8,10 @@ import {
   SUCCESS_ADD_ROUTINE,
   SUCCESS_DELETE_ROUTINE,
   SUCCESS_GET_ROUTINE,
-  SUCCESS_UPDATE_PROGRESS
+  SUCCESS_UPDATE_PROGRESS,
+  CHANGE_ROUTINE_TITLE,
+  CHANGE_DEFAULT_COUNT,
+  SUBMIT_ADD_ROUTINE
 } from '../consistants/actionTypes'
 
 const initialState = {
@@ -16,7 +19,9 @@ const initialState = {
   routines: [],
   inputModalVisible: false,
   detailModalVisible: false,
-  selectedRoutine: null
+  selectedRoutine: null,
+  name: "",
+  count: 1
 };
 
 const reducer = (state = initialState, action) => {
@@ -62,6 +67,22 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         routines: action.routines
+      }
+    case CHANGE_ROUTINE_TITLE:
+      return {
+        ...state,
+        name: action.name
+      }
+    case CHANGE_DEFAULT_COUNT:
+      return {
+        ...state,
+        count: action.count
+      }
+    case SUBMIT_ADD_ROUTINE:
+      return {
+        ...state,
+        name: "",
+        count: 1
       }
     default:
       return state;

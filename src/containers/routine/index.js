@@ -3,11 +3,11 @@ import { StyleSheet, Text, View, FlatList, StatusBar, TouchableOpacity } from 'r
 import { Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { setInputModalVisible, setDetailModalVisible, addRoutine, deleteRoutine, updateProgress, getRoutineFromCache } from '../actions/routines'
+import { setInputModalVisible, setDetailModalVisible, addRoutine, deleteRoutine, updateProgress, getRoutineFromCache } from '../../actions/routines'
 
-import AddRoutine from '../components/modals/AddRoutine';
-import RenderRoutine from '../components/flatlists/RenderRoutine';
-import Detail from '../components/modals/Detail';
+import AddRoutine from './AddRoutine';
+import RenderRoutine from '../../components/flatlists/RenderRoutine';
+import Detail from '../../components/modals/Detail';
 
 class Routine extends React.Component {
   state = {
@@ -16,10 +16,6 @@ class Routine extends React.Component {
     detailModalVisible: false,
     selectedRoutine: null
   };
-
-  setInputModalVisible = (visible) => {
-    this.props.setInputModalVisible(visible);
-  }
 
   setDetailModalVisible = (visible, routine) => {
     this.props.setDetailModalVisible(visible, routine);
@@ -54,6 +50,7 @@ class Routine extends React.Component {
         </View>
       )
     }
+    return date;
   }
 
   render() {
@@ -62,7 +59,7 @@ class Routine extends React.Component {
         <View style={styles.headerContainer}>
           <View style={styles.headerLeftContainer}>
             <TouchableOpacity>
-              <Ionicons style={styles.icon} name="md-add" size={28} color="white" onPress={() => { this.setInputModalVisible(!this.state.inputModalVisible); }} />
+              <Ionicons style={styles.icon} name="md-add" size={28} color="white" onPress={() => this.props.setInputModalVisible(!this.props.inputModalVisible)} />
             </TouchableOpacity>
           </View>
           <View style={styles.headerRightContainer}>
@@ -78,7 +75,7 @@ class Routine extends React.Component {
             )}
           />
         </View>
-        <AddRoutine visible={this.props.inputModalVisible} handleVisible={this.setInputModalVisible} createRoutine={this.setRoutine} />
+        <AddRoutine visible={this.props.inputModalVisible} handleVisible={() => this.props.setInputModalVisible(!this.props.inputModalVisible)} createRoutine={this.setRoutine} />
         <Detail visible={this.props.detailModalVisible} handleShowDetail={this.setDetailModalVisible} selectedRoutine={this.props.selectedRoutine} deleteRoutine={this.deleteRoutine} />
       </View>
     );
@@ -124,14 +121,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => {
-return ({
+const mapStateToProps = state => ({
   routines: state.routines.routines,
   inputModalVisible: state.routines.inputModalVisible,
   detailModalVisible: state.routines.detailModalVisible,
   selectedRoutine: state.routines.selectedRoutine
 });
-}
+
 const mapDispatchToProps = dispatch => ({
   addRoutine: (name, count) => dispatch(addRoutine(name, count)),
   deleteRoutine: (routine) => dispatch(deleteRoutine(routine)),
