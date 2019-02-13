@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { changeRoutineTitle, changeDefaultCount, submitAddRoutine } from '../../actions/routines';
 
 class AddRoutine extends React.Component {
-
   state = {
     name: "",
     count: 1

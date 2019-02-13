@@ -3,8 +3,8 @@ import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 import { AntDesign, Entypo } from '@expo/vector-icons';
 
 import Routine from '../../containers/routine';
-import Todo from '../../containers/Todo';
-import User from '../../containers/User';
+import Todo from '../../containers/list';
+import User from '../../containers/user';
 
 console.disableYellowBox = true;
 
