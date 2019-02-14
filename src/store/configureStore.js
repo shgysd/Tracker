@@ -2,10 +2,12 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
 import routinesReducer from '../reducers/routines';
+import usersReducer from '../reducers/users';
 import rootSaga from '../sagas';
 
 const rootReducer = combineReducers({
-  routines: routinesReducer
+  routines: routinesReducer,
+  users: usersReducer
 });
 
 const configureStore = () => {

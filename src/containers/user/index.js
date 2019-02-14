@@ -1,10 +1,11 @@
 import React from 'react';
-import { AsyncStorage, StyleSheet, Button, View, TextInput, StatusBar, Text } from 'react-native';
+import { AsyncStorage, StyleSheet, Button, View, TextInput, StatusBar } from 'react-native';
 import * as firebase from 'firebase';
+import { connect } from 'react-redux';
 
-import db from '../../configs/firebase';
+import { changeLoginEmail, changeLoginPassword, login } from '../../actions/users'
 
-export default class User extends React.Component {
+class User extends React.Component {
   state = {
     email: "",
     password: "",
@@ -12,28 +13,18 @@ export default class User extends React.Component {
     isLoading: true
   };
 
-  handleChangeEmail = (value) => {
-    this.setState({
-      email: value
-    });
-  }
-
-  handleChangePassword = (value) => {
-    this.setState({
-      password: value
-    });
-  }
-
   logIn = async (email, password) => {
-    firebase.auth().signInWithEmailAndPassword(email, password).then((item) => {
-      this.setState({
-        uid: item.user.uid
-      });
-      this.setUserID(item.user.uid);
-    }).catch((error) => {
-      const { code, message } = error;
-      alert(message);
-    });
+    // firebase.auth().signInWithEmailAndPassword(email, password).then((item) => {
+    //   console.log(item);
+    //   this.setState({
+    //     uid: item.user.uid
+    //   });
+    //   this.setUserID(item.user.uid);
+    // }).catch((error) => {
+    //   const { code, message } = error;
+    //   alert(message);
+    // });
+    this.props.login(email, password);
   };
 
   setUserID = async (uid) => {
@@ -63,7 +54,8 @@ export default class User extends React.Component {
   };
 
   UserScreen = () => {
-    if(this.state.uid) {
+    console.log(this.props.uid);
+    if(this.props.uid) {
       return (
         <View>
           <View style={styles.signOut}><Button color="#222" title="SignOut" onPress={ () => this.signOut() } /></View>
@@ -73,21 +65,21 @@ export default class User extends React.Component {
       return (
         <View>
             <TextInput
-              value={this.state.name}
+              value={this.props.email}
               placeholder="Email"
               style={styles.textInput}
-              onChangeText={this.handleChangeEmail}
+              onChangeText={(value) => this.props.changeLoginEmail(value)}
             />
             <TextInput
-              value={this.state.name}
+              value={this.props.password}
               placeholder="Password"
               style={styles.textInput}
-              onChangeText={this.handleChangePassword}
+              onChangeText={(value) => this.props.changeLoginPassword(value)}
               secureTextEntry={true}
             />
             <View style={styles.buttonContainer}>
-              <View style={styles.login}><Button color="#222" title="Login" onPress={ () => this.logIn(this.state.email, this.state.password) } /></View>
-              <View style={styles.login}><Button color="#222" title="SignUp" onPress={ () => this.signUp(this.state.email, this.state.password) } /></View>
+              <View style={styles.login}><Button color="#222" title="Login" onPress={ () => this.logIn(this.props.email, this.props.password) } /></View>
+              <View style={styles.login}><Button color="#222" title="SignUp" onPress={ () => this.signUp(this.props.email, this.props.password) } /></View>
             </View>
         </View>
       )
@@ -166,3 +158,17 @@ const styles = StyleSheet.create({
     flex: 1
   }
 });
+
+const mapStateToProps = state => ({
+  uid: state.users.uid,
+  email: state.users.email,
+  password: state.users.password
+});
+
+const mapDispatchToProps = dispatch => ({
+  changeLoginEmail: (email) => dispatch(changeLoginEmail(email)),
+  changeLoginPassword: (password) => dispatch(changeLoginPassword(password)),
+  login: (email, password) => dispatch(login(email, password)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(User)
