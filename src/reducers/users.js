@@ -2,7 +2,9 @@ import {
   CHANGE_LOGIN_EMAIL,
   CHANGE_LOGIN_PASSWORD,
   LOGIN,
-  SUCCESS_LOGIN
+  SUCCESS_LOGIN,
+  SIGNOUT,
+  SUCCESS_SIGNOUT
 } from '../consistants/actionTypes'
 
 const initialState = {
@@ -34,6 +36,18 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         uid: action.user
+      }
+    case SIGNOUT:
+      return {
+        ...state
+      }
+    case SUCCESS_SIGNOUT:
+      return {
+        ...state,
+        uid: null,
+        isLoading: false,
+        email: "",
+        password: ""
       }
     default:
       return state;

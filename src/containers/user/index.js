@@ -3,7 +3,7 @@ import { AsyncStorage, StyleSheet, Button, View, TextInput, StatusBar } from 're
 import * as firebase from 'firebase';
 import { connect } from 'react-redux';
 
-import { changeLoginEmail, changeLoginPassword, login } from '../../actions/users'
+import { changeLoginEmail, changeLoginPassword, login, signOut } from '../../actions/users'
 
 class User extends React.Component {
   state = {
@@ -43,18 +43,18 @@ class User extends React.Component {
   };
 
   signOut = async () => {
-    firebase.auth().signOut();
-    this.setState({
-      uid: null,
-      isLoading: false
-    });
-    await AsyncStorage.removeItem('uid');
-    await AsyncStorage.removeItem('routines');
-    await AsyncStorage.removeItem('tasks');
+    // firebase.auth().signOut();
+    // this.setState({
+    //   uid: null,
+    //   isLoading: false
+    // });
+    // await AsyncStorage.removeItem('uid');
+    // await AsyncStorage.removeItem('routines');
+    // await AsyncStorage.removeItem('tasks');
+    this.props.signOut();
   };
 
   UserScreen = () => {
-    console.log(this.props.uid);
     if(this.props.uid) {
       return (
         <View>
@@ -162,13 +162,15 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({
   uid: state.users.uid,
   email: state.users.email,
-  password: state.users.password
+  password: state.users.password,
+  isLoading: state.users.isLoading
 });
 
 const mapDispatchToProps = dispatch => ({
   changeLoginEmail: (email) => dispatch(changeLoginEmail(email)),
   changeLoginPassword: (password) => dispatch(changeLoginPassword(password)),
   login: (email, password) => dispatch(login(email, password)),
+  signOut: () => dispatch(signOut()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(User)
