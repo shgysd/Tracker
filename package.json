@@ -4,7 +4,9 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "test": "jest",
+    "test:watch": "yarn test -- --watch"
   },
   "dependencies": {
     "expo": "^32.0.0",
@@ -19,7 +21,8 @@
     "redux-saga": "^1.0.1"
   },
   "devDependencies": {
-    "babel-preset-expo": "^5.0.0"
+    "babel-preset-expo": "^5.0.0",
+    "jest": "^24.1.0"
   },
   "private": true
 }
