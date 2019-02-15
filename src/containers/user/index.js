@@ -1,9 +1,9 @@
 import React from 'react';
-import { AsyncStorage, StyleSheet, Button, View, TextInput, StatusBar } from 'react-native';
+import { AsyncStorage, StyleSheet, Button, View, TextInput, StatusBar, Text } from 'react-native';
 import * as firebase from 'firebase';
 import { connect } from 'react-redux';
 
-import { changeLoginEmail, changeLoginPassword, login, signOut } from '../../actions/users'
+import { changeLoginEmail, changeLoginPassword, login, signOut, isLoggedin } from '../../actions/users'
 
 class User extends React.Component {
   state = {
@@ -14,26 +14,8 @@ class User extends React.Component {
   };
 
   logIn = async (email, password) => {
-    // firebase.auth().signInWithEmailAndPassword(email, password).then((item) => {
-    //   console.log(item);
-    //   this.setState({
-    //     uid: item.user.uid
-    //   });
-    //   this.setUserID(item.user.uid);
-    // }).catch((error) => {
-    //   const { code, message } = error;
-    //   alert(message);
-    // });
     this.props.login(email, password);
   };
-
-  setUserID = async (uid) => {
-    await AsyncStorage.setItem('uid', uid);
-  }
-
-  getUserID = async () => {
-    await AsyncStorage.getItem('uid');
-  }
 
   signUp = async (email, password) => {
     firebase.auth().createUserWithEmailAndPassword(email, password).catch((error) => {
@@ -43,14 +25,6 @@ class User extends React.Component {
   };
 
   signOut = async () => {
-    // firebase.auth().signOut();
-    // this.setState({
-    //   uid: null,
-    //   isLoading: false
-    // });
-    // await AsyncStorage.removeItem('uid');
-    // await AsyncStorage.removeItem('routines');
-    // await AsyncStorage.removeItem('tasks');
     this.props.signOut();
   };
 
@@ -58,7 +32,8 @@ class User extends React.Component {
     if(this.props.uid) {
       return (
         <View>
-          <View style={styles.signOut}><Button color="#222" title="SignOut" onPress={ () => this.signOut() } /></View>
+          <View style={styles.signOut}><Button color="#222" title="SignOut" onPress={ () => this.signOut() } />
+          </View>
         </View>
       )
     } else {
@@ -87,26 +62,17 @@ class User extends React.Component {
   }
 
   async componentWillMount() {
-    await AsyncStorage.getItem('uid').then((uid) => {
-      if(uid) {
-        this.setState({
-          uid: uid
-        });
-      }
-
-      this.setState({
-        isLoading: false
-      });
-    })
+    this.props.isLoggedin()
   }
 
   render() {
-    if(this.state.isLoading) {
+    if(this.props.isLoading) {
       return (
         <View style={styles.userContainer}>
           <View style={styles.headerContainer}>
           </View>
           <View style={styles.mainContainer}>
+            <Text  style={styles.logging}>Loading...</Text>
           </View>
         </View>
       );
@@ -156,6 +122,12 @@ const styles = StyleSheet.create({
   },
   signup: {
     flex: 1
+  },
+  logging: {
+    color: "#fafafa",
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 8,
   }
 });
 
@@ -171,6 +143,7 @@ const mapDispatchToProps = dispatch => ({
   changeLoginPassword: (password) => dispatch(changeLoginPassword(password)),
   login: (email, password) => dispatch(login(email, password)),
   signOut: () => dispatch(signOut()),
+  isLoggedin: () => dispatch(isLoggedin()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(User)

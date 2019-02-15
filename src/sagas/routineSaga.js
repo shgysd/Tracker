@@ -53,16 +53,28 @@ export function* handleGetRoutine() {
   }
 }
 
+const generateKey = (length) => {
+  const keyLength = length;
+  const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  const cl = characters.length;
+  let key = "";
+  for(let i=0; i < keyLength; i++){
+    key += characters[Math.floor(Math.random()*cl)];
+  }
+  return key;
+}
+
 const addRoutine = async (name, count) => {
   try {
     const uid = await AsyncStorage.getItem('uid');
     const item = await AsyncStorage.getItem('routines');
     const routines = item ? JSON.parse(item) : [];
+    const key = generateKey(16);
     const routine = {
       name: name,
       count: count,
       progress: [],
-      key: Math.random().toString(),
+      key: key,
       createdAt: moment().format()
     };
 
@@ -70,9 +82,6 @@ const addRoutine = async (name, count) => {
       db.ref('Users/' + uid + '/routines/').push(routine).then((item) => {
         routine.key = item.key;
         routines.push(routine);
-        db.ref('Users/' + uid + '/routines/').child(routine.key).set(routine).then(() => {
-          AsyncStorage.setItem('routines', JSON.stringify(routines));
-        })
       });
       return { payload: routine };
     } else {

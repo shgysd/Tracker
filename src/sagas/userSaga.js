@@ -1,6 +1,6 @@
 import { call, put, take } from 'redux-saga/effects';
 import { AsyncStorage } from 'react-native';
-import { successLogin, successSignOut } from '../actions/users';
+import { successLogin, successSignOut, successIsLoggedin, failureIsLoggedin } from '../actions/users';
 import * as firebase from 'firebase';
 import db from '../configs/firebase';
 
@@ -23,6 +23,19 @@ export function* handleSignOut() {
     if (payload && !error) {
       yield put(successSignOut(payload));
     } else {
+      console.log(error);
+    }
+  }
+}
+
+export function* handleIsLoggedin() {
+  while (true) {
+    const action = yield take("IS_LOGGEDIN");
+    const {payload, error} = yield call(isLoggedin);
+    if (payload && !error) {
+      yield put(successIsLoggedin(payload));
+    } else {
+      yield put(failureIsLoggedin(payload));
       console.log(error);
     }
   }
@@ -55,7 +68,26 @@ const signOut = async () => {
       console.log(error);
       throw new Error(error);
     });
+    await AsyncStorage.removeItem('routines');
     return { payload: "ok"};
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+}
+
+const isLoggedin = async () => {
+  try {
+    let uid = null;
+    await AsyncStorage.getItem('uid').then((id) => {
+      if(id) {
+        uid = id;
+      }
+    }).catch(error => {
+      console.log(error);
+      throw new Error(error);
+    });
+    return { payload: uid};
   } catch (error) {
     console.log(error);
     return { error };
