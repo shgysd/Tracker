@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, StatusBar, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList, StatusBar, TouchableOpacity, Vibration } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
 import { connect } from 'react-redux';
@@ -32,6 +32,7 @@ class Routine extends React.Component {
   }
 
   setProgress = (key, date) => {
+    Vibration.vibrate(4);
     this.props.updateProgress(key, date, this.props.routines);
   }
 
