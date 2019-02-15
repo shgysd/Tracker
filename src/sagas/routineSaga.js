@@ -79,10 +79,8 @@ const addRoutine = async (name, count) => {
     };
 
     if(uid) {
-      db.ref('Users/' + uid + '/routines/').push(routine).then((item) => {
-        routine.key = item.key;
-        routines.push(routine);
-      });
+      await AsyncStorage.setItem('routines', JSON.stringify(routines));
+      db.ref('Users/' + uid + '/routines/').push(routine);
       return { payload: routine };
     } else {
       routines.push(routine);
