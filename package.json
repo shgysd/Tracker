@@ -21,8 +21,16 @@
     "redux-saga": "^1.0.1"
   },
   "devDependencies": {
+    "@types/expo__vector-icons": "^9.0.1",
+    "@types/react": "^16.8.3",
+    "@types/react-dom": "^16.8.2",
+    "@types/react-native": "^0.57.36",
+    "@types/react-redux": "^7.0.1",
     "babel-preset-expo": "^5.0.0",
-    "jest": "^24.1.0"
+    "jest": "^24.1.0",
+    "tslint": "^5.12.1",
+    "tslint-config-airbnb": "^5.11.1",
+    "typescript": "^3.3.3"
   },
   "private": true
 }

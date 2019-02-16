@@ -1,18 +1,18 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-export default class RenderTask extends React.Component {
-  state = {
-    progress: 0
-  }
+interface Props {
+  onSetStatus: any,
+  index: number,
+  tasks: any
+}
 
-  render() {
-    return (
-      <TouchableOpacity onPress={() => this.props.onSetStatus(this.props.index)}>
-        <View style={styles.itemContainer}><Text style={this.props.tasks.item.status ? styles.itemDone : styles.item}>{this.props.tasks.item.name}</Text></View>
-      </TouchableOpacity>
-    )
-  }
+const RenderTask = (props: Props) => {
+  return (
+    <TouchableOpacity onPress={() => props.onSetStatus(props.index)}>
+      <View style={styles.itemContainer}><Text style={props.tasks.item.status ? styles.itemDone : styles.item}>{props.tasks.item.name}</Text></View>
+    </TouchableOpacity>
+  )
 };
 
 const styles = StyleSheet.create({
@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#333",
         flexDirection: "row",
         alignItems: "center",
-        flexDirection: "row"
     },
     textContainer: {
       flex: 1,
@@ -67,3 +66,5 @@ const styles = StyleSheet.create({
       textDecorationLine: "line-through"
     }
 });
+
+export default RenderTask;

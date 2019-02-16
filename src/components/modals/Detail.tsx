@@ -3,31 +3,18 @@ import { StyleSheet, Text, View, Modal, ScrollView,Button } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
 
-export default class Detail extends React.Component {
+interface Props {
+  selectedRoutine: {[progress: string]: number},
+  visible: boolean,
+  handleShowDetail: any,
+  deleteRoutine: any
+}
 
-  getBestStreaks = () => {
-    const progress = this.props.selectedRoutine ? this.props.selectedRoutine.progress : [];
-    let count = [];
+class Detail extends React.Component<Props> {
 
-    progress.sort(function(a,b){
-      return moment(a.date, 'MM-DD-YYYY').diff(moment(b.date, 'MM-DD-YYYY'));
-    });
-
-    progress.map(item => {
-      count.push(item.count);
-    });
-
-    let streaks = count.reduce((res, n) => 
-      (n ? res.push(0) : res[res.length-1]++, res)
-    , [0]);
-    
-    streaks.join(",");
-    return Math.max(...streaks);
-  }
-
-  checkComplete = (routine, date) => {
+  checkComplete = (routine: any, date: string) => {
     let style = styles.dateContainer
-    routine.progress.map((item) => {
+    routine.progress.map((item: any) => {
       if(item.date === date && 0 >= item.count ) {
         style = styles.done;
       }
@@ -80,7 +67,7 @@ export default class Detail extends React.Component {
             <View style={styles.historyContainer}>
               <Text style={styles.history}>History</Text>
               <View style={styles.historyViewContainer}>
-                <View style={styles.weekContainer}>
+                <View>
                   <View style={styles.dayContainer}><Text style={styles.day}>Sun</Text></View>
                   <View style={styles.dayContainer}><Text style={styles.day}>Mon</Text></View>
                   <View style={styles.dayContainer}><Text style={styles.day}>Tue</Text></View>
@@ -94,10 +81,6 @@ export default class Detail extends React.Component {
                 </ScrollView>
               </View>
             </View>
-            {/* <View style={styles.streakContainer}>
-              <Text style={styles.history}>Best Streaks</Text>
-              <Text style={styles.history}>{this.getBestStreaks()}</Text>
-            </View> */}
             <View>
               <Button color="#111" title="DELETE" onPress={ () => this.props.deleteRoutine(this.props.selectedRoutine, !this.props.visible) } />
             </View>
@@ -192,3 +175,5 @@ const styles = StyleSheet.create({
     color: "#f44336"
   }
 });
+
+export default Detail;

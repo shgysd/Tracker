@@ -47,7 +47,7 @@ const reducer = (state = initialState, action) => {
     case SUCCESS_LOGIN:
       return {
         ...state,
-        uid: action.user,
+        uid: action.uid,
         isLoading: false
       }
     case SIGNOUT:

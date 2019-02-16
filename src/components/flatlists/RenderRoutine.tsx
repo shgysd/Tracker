@@ -1,10 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import * as Progress from 'react-native-progress';
 import moment from 'moment';
 
-export default RenderRoutine = (props) => (
+interface Props {
+  handleShowDetail: any,
+  handleProgress: any,
+  routine: any,
+  visible: boolean
+}
+
+const RenderRoutine = (props: Props) => (
   <View style={styles.renderItem}>
     <View style={styles.textContainer}>
       <TouchableOpacity onPress={() => props.handleShowDetail(!props.visible, props.routine.item)}>
@@ -19,14 +26,14 @@ export default RenderRoutine = (props) => (
   </View>
 );
 
-const progressScreen = (props) => {
+const progressScreen = (props: Props) => {
   const progress = [];
 
   for(let i = 0; i < 5; i++) {
     let date = moment().subtract(i, 'days').format('MM-DD-YYYY');
     let count = props.routine.item.count;
 
-    props.routine.item.progress.map((progress) => {
+    props.routine.item.progress.map((progress: {[key: string]: string}) => {
       if(progress.date === date) {
         count = progress.count;
       };
@@ -56,8 +63,7 @@ const styles = StyleSheet.create({
         marginBottom: 2,
         backgroundColor: "#333",
         flexDirection: "row",
-        alignItems: "center",
-        flexDirection: "row"
+        alignItems: "center"
     },
     textContainer: {
       flex: 1
@@ -88,3 +94,5 @@ const styles = StyleSheet.create({
       top: 14,
     }
 });
+
+export default RenderRoutine;

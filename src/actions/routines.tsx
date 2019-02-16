@@ -14,14 +14,14 @@ import {
   SUBMIT_ADD_ROUTINE
 } from '../consistants/actionTypes'
 
-export const setInputModalVisible = (visible) => {
+export const setInputModalVisible = (visible: boolean) => {
   return {
     type: SET_INPUT_MODAL_VISIBLE,
     visible: visible
   };
 }
 
-export const setDetailModalVisible = (visible, routine) => {
+export const setDetailModalVisible = (visible: boolean, routine: object) => {
   return {
     type: SET_DETAIL_MODAL_VISIBLE,
     visible: visible,
@@ -29,7 +29,7 @@ export const setDetailModalVisible = (visible, routine) => {
   };
 }
 
-export const addRoutine = (name, count) => {
+export const addRoutine = (name: string, count: number) => {
   return {
     type: ADD_ROUTINE,
     name: name,
@@ -37,14 +37,14 @@ export const addRoutine = (name, count) => {
   };
 }
 
-export const deleteRoutine = (routine) => {
+export const deleteRoutine = (routine: object) => {
   return {
     type: DELETE_ROUTINE,
     routine: routine
   };
 }
 
-export const updateProgress = (key, date, routines) => {
+export const updateProgress = (key: string, date: string, routines: object) => {
   return {
     type: UPDATE_PROGRESS,
     key: key,
@@ -58,42 +58,42 @@ export const getRoutineFromCache = () => {
   };
 }
 
-export const successAddRoutine = (routine) => {
+export const successAddRoutine = (routine: object) => {
   return {
     type: SUCCESS_ADD_ROUTINE,
     routine: routine
   };
 }
 
-export const successDeleteRoutine = (routine) => {
+export const successDeleteRoutine = (routine: object) => {
   return {
     type: SUCCESS_DELETE_ROUTINE,
     routine: routine
   };
 }
 
-export const successUpdateProgress = (routines) => {
+export const successUpdateProgress = (routines: object) => {
   return {
     type: SUCCESS_UPDATE_PROGRESS,
     routines: routines
   };
 }
 
-export const successGetRoutine = (routines) => {
+export const successGetRoutine = (routines: object) => {
   return {
     type: SUCCESS_GET_ROUTINE,
     routines: routines
   };
 }
 
-export const changeRoutineTitle = (name) => {
+export const changeRoutineTitle = (name: object) => {
   return {
     type: CHANGE_ROUTINE_TITLE,
     name: name
   };
 }
 
-export const changeDefaultCount = (count) => {
+export const changeDefaultCount = (count: object) => {
   return {
     type: CHANGE_DEFAULT_COUNT,
     count: count
