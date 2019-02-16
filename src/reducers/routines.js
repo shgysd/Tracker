@@ -15,7 +15,6 @@ import {
 } from '../consistants/actionTypes'
 
 const initialState = {
-  counter: 0,
   routines: [],
   inputModalVisible: false,
   detailModalVisible: false,

@@ -14,18 +14,6 @@ import {
   SUBMIT_ADD_ROUTINE
 } from '../consistants/actionTypes'
 
-export const increment = () => {
-  return {
-    type: INCREMENT
-  };
-};
-
-export const decrement = () => {
-  return {
-    type: DECREMENT
-  };
-}
-
 export const setInputModalVisible = (visible) => {
   return {
     type: SET_INPUT_MODAL_VISIBLE,
