@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, StatusBar, TouchableOpacity, Vibration } from 'react-native';
+import { Permissions, Notifications } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
 import { connect } from 'react-redux';
@@ -16,6 +17,35 @@ class Routine extends React.Component {
     detailModalVisible: false,
     selectedRoutine: null
   };
+
+  registerForPushNotificationsAsync = async () => {
+
+    //warningがでるのを防ぐためにtry catchを入れる
+    try {
+  
+      const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+      );
+      let finalStatus = existingStatus;
+  
+      if (existingStatus !== 'granted') {
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+      }
+  
+      if (finalStatus !== 'granted') {
+        return;
+      }
+  
+      let token = await Notifications.getExpoPushTokenAsync();
+  
+      //コンソールに出力
+      console.log(token);
+  
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   setDetailModalVisible = (visible, routine) => {
     this.props.setDetailModalVisible(visible, routine);
@@ -37,6 +67,7 @@ class Routine extends React.Component {
   }
 
   componentWillMount() {
+    this.registerForPushNotificationsAsync();
     this.props.getRoutineFromCache();
   }
 

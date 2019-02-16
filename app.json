@@ -24,6 +24,10 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.test.tracker",
+      "googleServicesFile": "./google-services.json"
     }
   }
 }
