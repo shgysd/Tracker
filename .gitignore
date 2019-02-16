@@ -63,3 +63,4 @@ typings/
 src/configs/
 .DS_Store
 assets
+google-services.json
