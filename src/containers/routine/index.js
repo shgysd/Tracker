@@ -20,7 +20,6 @@ class Routine extends React.Component {
 
   registerForPushNotificationsAsync = async () => {
 
-    //warningがでるのを防ぐためにtry catchを入れる
     try {
   
       const { status: existingStatus } = await Permissions.getAsync(
@@ -39,9 +38,19 @@ class Routine extends React.Component {
   
       let token = await Notifications.getExpoPushTokenAsync();
   
-      //コンソールに出力
-      console.log(token);
-  
+      // fetch("https://exp.host/--/api/v2/push/send", {
+      //   method: "POST",
+      //   headers: {
+      //     "Accept": "application/json",
+      //     "ContentType": "application/json"
+      //   },
+      //   body: JSON.stringify([{
+      //     "to": token,
+      //     "body": "test"
+      //   }])
+
+      // });
+
     } catch (error) {
       console.log(error);
     }
@@ -67,7 +76,7 @@ class Routine extends React.Component {
   }
 
   componentWillMount() {
-    this.registerForPushNotificationsAsync();
+    //this.registerForPushNotificationsAsync();
     this.props.getRoutineFromCache();
   }
 
