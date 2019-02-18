@@ -1,13 +1,15 @@
 import React from 'react';
 import { StyleSheet, AsyncStorage, View, StatusBar, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { connect } from 'react-redux';
+import { addTask } from '../../actions/lists'
 
 import db from '../../configs/firebase';
 
 import CreateList from '../../components/modals/CreateList';
 import RenderTask from '../../components/flatlists/RenderTask';
 
-export default class Todo extends React.Component {
+class List extends React.Component {
   state = {
     tasks: [{name: 1, status: false}],
     createListVisible: false
@@ -17,23 +19,9 @@ export default class Todo extends React.Component {
     this.setState({createListVisible: visible});
   }
 
-  setLists = async (name) => {
-    const uid = await AsyncStorage.getItem('uid');
-    const tasks = this.state.tasks.slice();
-    const createdAt = moment().format();
-
-    tasks.push({ name: name, status: false});
-    this.setState({tasks: tasks}, () => {
-      AsyncStorage.setItem('tasks', JSON.stringify(tasks)).then(() => {
-        if(uid) {
-          db.ref('Users/' + uid + '/tasks/').push({
-            name: name,
-            status: false,
-            createdAt: createdAt
-          });
-        };
-      });
-    });
+  setLists = (name) => {
+    console.log(1);
+    this.props.addTask(name);
   }
 
   setStatus = (index) => {
@@ -45,26 +33,7 @@ export default class Todo extends React.Component {
   }
 
   async componentWillMount() {
-    const uid = await AsyncStorage.getItem('uid');
-    await AsyncStorage.getItem('tasks').then((tasks) => {
-      if(tasks) {
-        this.setState({ tasks: JSON.parse(tasks)});
-      } else {
-        const tasks = this.state.tasks.slice();
-        db.ref('Users/' + uid + '/tasks/').on('value', (snapshot) => {
-          snapshot.forEach((val) => {
-            tasks.push({
-              name: val.child('name').val(),
-              status: val.child('status').val()
-            })
-          })
-          this.setState({tasks: tasks});
-        });
-      }
-    }).catch((error) => {
-      const { code, message } = error;
-      console.log(message);
-    });
+
   }
 
   render() {
@@ -78,7 +47,7 @@ export default class Todo extends React.Component {
         <View style={styles.mainContainer}>
           <FlatList
             style={styles.listContainer}
-            data={this.state.tasks}
+            data={this.props.tasks}
             renderItem={(data) => {
               let { index } = data;
               return (
@@ -126,3 +95,16 @@ const styles = StyleSheet.create({
     fontSize: 11
   }
 });
+
+const mapStateToProps = state => {
+  console.log(state);
+  return ({
+    tasks: state.lists.tasks,
+  });
+}
+
+const mapDispatchToProps = dispatch => ({
+  addTask: (name) => dispatch(addTask(name)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(List);

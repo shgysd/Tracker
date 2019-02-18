@@ -38,10 +38,10 @@ class AddRoutine extends React.Component {
                   onChangeText={(value) => this.props.changeRoutineTitle(value)}
                 />
                 <View style={styles.pickerContainer}>
-                  <Text style={{flex: 1,color: "#eee", fontSize: 18, paddingLeft: 4, paddingTop: 12}}>Daily Count</Text>
+                  <Text style={styles.dailyCount}>Daily Count</Text>
                   <Picker
                     selectedValue={this.props.count}
-                    style={{flex: 1, color: "#eee", alignItems: "center"}}
+                    style={styles.picker}
                     onValueChange={(value) => this.props.changeDefaultCount(value)}
                   >
                     {this.getPickerItems(10)}
@@ -91,6 +91,18 @@ const styles = StyleSheet.create({
   pickerContainer: {
     flex: 1,
     flexDirection: "row"
+  },
+  picker: {
+    flex: 1,
+    color: "#eee",
+    alignItems: "center"
+  },
+  dailyCount: {
+    flex: 1,
+    color: "#eee",
+    fontSize: 18,
+    paddingLeft: 4,
+    paddingTop: 12
   }
 });
 

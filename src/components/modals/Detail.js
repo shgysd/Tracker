@@ -3,18 +3,11 @@ import { StyleSheet, Text, View, Modal, ScrollView,Button } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
 
-interface Props {
-  selectedRoutine: {[progress: string]: number},
-  visible: boolean,
-  handleShowDetail: any,
-  deleteRoutine: any
-}
+class Detail extends React.Component {
 
-class Detail extends React.Component<Props> {
-
-  checkComplete = (routine: any, date: string) => {
+  checkComplete = (routine, date) => {
     let style = styles.dateContainer
-    routine.progress.map((item: any) => {
+    routine.progress.map((item) => {
       if(item.date === date && 0 >= item.count ) {
         style = styles.done;
       }
@@ -82,7 +75,7 @@ class Detail extends React.Component<Props> {
               </View>
             </View>
             <View>
-              <Button color="#111" title="DELETE" onPress={ () => this.props.deleteRoutine(this.props.selectedRoutine, !this.props.visible) } />
+              <Button color="#111" title="DELETE" onPress={ () => this.props.deleteRoutine(this.props.selectedRoutine.key) } />
             </View>
           </View>
         </View>

@@ -10,7 +10,7 @@ class User extends React.Component {
     email: "",
     password: "",
     uid: null,
-    isLoading: true
+    isLoading: false
   };
 
   logIn = async (email, password) => {
@@ -61,12 +61,8 @@ class User extends React.Component {
     }
   }
 
-  async componentWillMount() {
-    this.props.isLoggedin()
-  }
-
   render() {
-    if(this.props.isLoading) {
+    if(false) {
       return (
         <View style={styles.userContainer}>
           <View style={styles.headerContainer}>

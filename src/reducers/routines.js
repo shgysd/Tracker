@@ -12,7 +12,9 @@ import {
   CHANGE_ROUTINE_TITLE,
   CHANGE_DEFAULT_COUNT,
   SUBMIT_ADD_ROUTINE
-} from '../consistants/actionTypes'
+} from '../consistants/actionTypes';
+
+import moment from 'moment';
 
 const initialState = {
   routines: [],
@@ -37,11 +39,44 @@ const reducer = (state = initialState, action) => {
         selectedRoutine: action.routine
       }
     case ADD_ROUTINE:
-      return state;
+      const key = generateKey(16);
+      const routine = {
+        name: action.name,
+        count: action.count,
+        progress: [],
+        key,
+        createdAt: moment().format()
+      }
+      return {
+        ...state,
+        routines: state.routines.concat(routine),
+        inputModalVisible: false
+      }
     case DELETE_ROUTINE:
       return state
     case UPDATE_PROGRESS:
-      return state
+      return {
+        ...state,
+        routines: state.routines.map(routine =>{
+          if(routine.key === action.key) {
+            const progress = routine.progress.find(item => {
+              if(item.date === action.date) {
+                if(0 < item.count) {
+                  item.count -= 1;
+                } else {
+                  item.count = routine.count;
+                }
+              }
+              return item.date === action.date;
+            });
+
+            if(!progress) {
+              routine.progress = routine.progress.concat({ date: action.date, count: routine.count - 1 });
+            };
+          }
+          return routine;
+        })
+      }
     case GET_ROUTINE_FROM_CACHE:
       return state
     case SUCCESS_ADD_ROUTINE:
@@ -52,10 +87,10 @@ const reducer = (state = initialState, action) => {
     case SUCCESS_DELETE_ROUTINE:
       return {
         ...state,
-        detailModalVisible: false,
-        routines: state.routines.filter(val => {
-          return val.key !== action.routine.key
-        })
+        routines: state.routines.filter(item => {
+          return item.key !== action.key
+        }),
+        detailModalVisible: false
       }
     case SUCCESS_UPDATE_PROGRESS:
       return {
@@ -87,5 +122,16 @@ const reducer = (state = initialState, action) => {
       return state;
   }
 };
+
+const generateKey = (length) => {
+  const keyLength = length;
+  const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  const cl = characters.length;
+  let key = "";
+  for(let i=0; i < keyLength; i++){
+    key += characters[Math.floor(Math.random()*cl)];
+  }
+  return key;
+}
 
 export default reducer;

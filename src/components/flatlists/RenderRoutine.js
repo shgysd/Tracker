@@ -4,14 +4,7 @@ import { Entypo } from '@expo/vector-icons';
 import * as Progress from 'react-native-progress';
 import moment from 'moment';
 
-interface Props {
-  handleShowDetail: any,
-  handleProgress: any,
-  routine: any,
-  visible: boolean
-}
-
-const RenderRoutine = (props: Props) => (
+const RenderRoutine = (props) => (
   <View style={styles.renderItem}>
     <View style={styles.textContainer}>
       <TouchableOpacity onPress={() => props.handleShowDetail(!props.visible, props.routine.item)}>
@@ -26,14 +19,14 @@ const RenderRoutine = (props: Props) => (
   </View>
 );
 
-const progressScreen = (props: Props) => {
+const progressScreen = (props) => {
   const progress = [];
 
   for(let i = 0; i < 5; i++) {
     let date = moment().subtract(i, 'days').format('MM-DD-YYYY');
     let count = props.routine.item.count;
 
-    props.routine.item.progress.map((progress: {[key: string]: string}) => {
+    props.routine.item.progress.map((progress) => {
       if(progress.date === date) {
         count = progress.count;
       };

@@ -20,14 +20,37 @@ export function* handleSetRoutine() {
 export function* handleDeleteRoutine() {
   while (true) {
     const action = yield take("DELETE_ROUTINE");
-    const {payload, error} = yield call(deleteRoutine, action.routine);
-    if (payload && !error) {
-      yield put(successDeleteRoutine(payload));
+    const { response, error } = yield call(deleteRoutine);
+    if ( response === 'YES' && !error ) {
+      yield put(successDeleteRoutine(action.key));
     } else {
       console.log(error);
     }
   }
 }
+
+const deleteRoutine = async () => {
+  try {
+    const response = await AsyncAlert();
+    return { response };
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+}
+
+const AsyncAlert = async () => {
+  return new Promise((resolve, reject) => {
+    Alert.alert(
+      'Alert Title',
+      'Are you sure to delete this routine?',
+      [
+        {text: 'NO', onPress: () => { resolve("NO"); }},
+        {text: 'YES', onPress: () => { resolve("YES");}}
+      ]
+    );
+  });
+};
 
 export function* handleUpdateProgress() {
   while (true) {
@@ -93,21 +116,7 @@ const addRoutine = async (name, count) => {
   }
 }
 
-const deleteRoutine = async (routine) => {
-  try {
-    const item = await AsyncStorage.getItem('routines');
-    const items = JSON.parse(item);
-    if(item) {
-      const response = await AsyncAlert(items, routine);
-      return { payload: routine };
-    } else {
-      return { payload: routine };
-    }
-  } catch (error) {
-    console.log(error);
-    return { error };
-  }
-}
+
 
 const updateProgress = async (key, date, items) => {
   try {
@@ -144,30 +153,6 @@ const updateProgress = async (key, date, items) => {
     return { error };
   }
 }
-
-const AsyncAlert = async (items, routine) => {
-  const uid = await AsyncStorage.getItem('uid');
-  return new Promise((resolve, reject) => {
-    Alert.alert(
-      'Alert Title',
-      'Would you really like to delete?',
-      [
-        {text: 'NO', onPress: () => { resolve("NO") }},
-        {text: 'YES', onPress: () => {
-          const routines = items.filter(val => {
-            return val.key !== routine.key
-          });
-      
-          AsyncStorage.setItem('routines', JSON.stringify(routines));
-          if(uid) {
-            db.ref('Users/' + uid + '/routines/').child(routine.key).remove();
-          }
-          resolve("YES");
-        }}
-      ]
-    );
-  });
-};
 
 const getRoutineFromCache = async () => {
   try {

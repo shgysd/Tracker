@@ -14,41 +14,42 @@ import {
   SUBMIT_ADD_ROUTINE
 } from '../consistants/actionTypes'
 
-export const setInputModalVisible = (visible: boolean) => {
+export const setInputModalVisible = (visible) => {
   return {
     type: SET_INPUT_MODAL_VISIBLE,
-    visible: visible
+    visible
   };
 }
 
-export const setDetailModalVisible = (visible: boolean, routine: object) => {
+export const setDetailModalVisible = (visible, routine) => {
   return {
     type: SET_DETAIL_MODAL_VISIBLE,
-    visible: visible,
-    routine: routine
+    visible,
+    routine
   };
 }
 
-export const addRoutine = (name: string, count: number) => {
+export const addRoutine = (name, count) => {
   return {
     type: ADD_ROUTINE,
-    name: name,
-    count: count
+    name,
+    count
   };
 }
 
-export const deleteRoutine = (routine: object) => {
+export const deleteRoutine = (key) => {
   return {
     type: DELETE_ROUTINE,
-    routine: routine
+    key
   };
 }
 
-export const updateProgress = (key: string, date: string, routines: object) => {
+export const updateProgress = (key, date, routines) => {
   return {
     type: UPDATE_PROGRESS,
-    key: key,
-    date: date,routines
+    key,
+    date,
+    routines
   };
 }
 
@@ -58,45 +59,45 @@ export const getRoutineFromCache = () => {
   };
 }
 
-export const successAddRoutine = (routine: object) => {
+export const successAddRoutine = (routine) => {
   return {
     type: SUCCESS_ADD_ROUTINE,
-    routine: routine
+    routine
   };
 }
 
-export const successDeleteRoutine = (routine: object) => {
+export const successDeleteRoutine = (key) => {
   return {
     type: SUCCESS_DELETE_ROUTINE,
-    routine: routine
+    key
   };
 }
 
-export const successUpdateProgress = (routines: object) => {
+export const successUpdateProgress = (routines) => {
   return {
     type: SUCCESS_UPDATE_PROGRESS,
-    routines: routines
+    routines
   };
 }
 
-export const successGetRoutine = (routines: object) => {
+export const successGetRoutine = (routines) => {
   return {
     type: SUCCESS_GET_ROUTINE,
-    routines: routines
+    routines
   };
 }
 
-export const changeRoutineTitle = (name: object) => {
+export const changeRoutineTitle = (name) => {
   return {
     type: CHANGE_ROUTINE_TITLE,
-    name: name
+    name
   };
 }
 
-export const changeDefaultCount = (count: object) => {
+export const changeDefaultCount = (count) => {
   return {
     type: CHANGE_DEFAULT_COUNT,
-    count: count
+    count
   };
 }
 

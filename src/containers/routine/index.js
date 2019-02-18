@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, StatusBar, TouchableOpacity, Vibration } from 'react-native';
+import { StyleSheet, Text, View, FlatList, StatusBar, TouchableOpacity, Vibration, AsyncStorage } from 'react-native';
 import { Permissions, Notifications } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { setInputModalVisible, setDetailModalVisible, addRoutine, deleteRoutine, updateProgress, getRoutineFromCache } from '../../actions/routines'
-
+// components
 import AddRoutine from './AddRoutine';
 import RenderRoutine from '../../components/flatlists/RenderRoutine';
 import Detail from '../../components/modals/Detail';
@@ -18,66 +18,30 @@ class Routine extends React.Component {
     selectedRoutine: null
   };
 
-  registerForPushNotificationsAsync = async () => {
+  handleSetInputModalVisible = () => {
+    Vibration.vibrate(6);
+    this.props.setInputModalVisible(!this.props.inputModalVisible);
+  };
 
-    try {
-  
-      const { status: existingStatus } = await Permissions.getAsync(
-        Permissions.NOTIFICATIONS
-      );
-      let finalStatus = existingStatus;
-  
-      if (existingStatus !== 'granted') {
-        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-        finalStatus = status;
-      }
-  
-      if (finalStatus !== 'granted') {
-        return;
-      }
-  
-      let token = await Notifications.getExpoPushTokenAsync();
-  
-      // fetch("https://exp.host/--/api/v2/push/send", {
-      //   method: "POST",
-      //   headers: {
-      //     "Accept": "application/json",
-      //     "ContentType": "application/json"
-      //   },
-      //   body: JSON.stringify([{
-      //     "to": token,
-      //     "body": "test"
-      //   }])
-
-      // });
-
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  setDetailModalVisible = (visible, routine) => {
+  handleSetDetailModalVisible = (visible, routine) => {
     this.props.setDetailModalVisible(visible, routine);
   }
 
-  setRoutine = (name, count) => {
-    this.props.addRoutine(name, count);
-    this.props.setInputModalVisible(false);
+  addRoutine = (name, count) => {
+    if(name.length > 0) {
+      this.props.addRoutine(name, count);
+    } else {
+      Vibration.vibrate(8);
+    }
   }
 
-  deleteRoutine = (routine, visible) => {
-    this.props.deleteRoutine(routine);
-    this.props.setInputModalVisible(visible);
+  deleteRoutine = (key) => {
+    this.props.deleteRoutine(key);
   }
 
   setProgress = (key, date) => {
     Vibration.vibrate(4);
     this.props.updateProgress(key, date, this.props.routines);
-  }
-
-  componentWillMount() {
-    //this.registerForPushNotificationsAsync();
-    this.props.getRoutineFromCache();
   }
 
   getDateView = () => {
@@ -100,7 +64,7 @@ class Routine extends React.Component {
         <View style={styles.headerContainer}>
           <View style={styles.headerLeftContainer}>
             <TouchableOpacity>
-              <Ionicons style={styles.icon} name="md-add" size={28} color="white" onPress={() => this.props.setInputModalVisible(!this.props.inputModalVisible)} />
+              <Ionicons style={styles.icon} name="md-add" size={28} color="white" onPress={ this.handleSetInputModalVisible } />
             </TouchableOpacity>
           </View>
           <View style={styles.headerRightContainer}>
@@ -112,12 +76,12 @@ class Routine extends React.Component {
             style={styles.listContainer}
             data={this.props.routines}
             renderItem={(routine) => (
-              <RenderRoutine routine={routine} handleProgress={this.setProgress} handleShowDetail={this.setDetailModalVisible} visible={this.detailModalVisible} />
+              <RenderRoutine routine={routine} handleProgress={this.setProgress} handleShowDetail={this.handleSetDetailModalVisible} visible={this.detailModalVisible} />
             )}
           />
         </View>
-        <AddRoutine visible={this.props.inputModalVisible} handleVisible={() => this.props.setInputModalVisible(!this.props.inputModalVisible)} createRoutine={this.setRoutine} />
-        <Detail visible={this.props.detailModalVisible} handleShowDetail={this.setDetailModalVisible} selectedRoutine={this.props.selectedRoutine} deleteRoutine={this.deleteRoutine} />
+        <AddRoutine visible={this.props.inputModalVisible} handleVisible={() => this.props.setInputModalVisible(!this.props.inputModalVisible)} createRoutine={this.addRoutine} />
+        <Detail visible={this.props.detailModalVisible} handleShowDetail={this.handleSetDetailModalVisible} selectedRoutine={this.props.selectedRoutine} deleteRoutine={this.deleteRoutine} />
       </View>
     );
   }
@@ -163,6 +127,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
+  uid: state.users.uid,
   routines: state.routines.routines,
   inputModalVisible: state.routines.inputModalVisible,
   detailModalVisible: state.routines.detailModalVisible,
