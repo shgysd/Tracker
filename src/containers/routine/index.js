@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, StatusBar, TouchableOpacity, Vibration, AsyncStorage } from 'react-native';
 import { Permissions, Notifications } from 'expo';
-import { Ionicons } from '@expo/vector-icons';
-import moment from 'moment';
 import { connect } from 'react-redux';
-import { setInputModalVisible, setDetailModalVisible, addRoutine, deleteRoutine, updateProgress, getRoutineFromCache } from '../../actions/routines'
-// components
+import { setInputModalVisible, setDetailModalVisible, addRoutine, deleteRoutine, updateProgress, getRoutineFromCache } from '../../actions/routines';
+
+import Header from '../../components/header';
+import Date from '../../components/date';
 import AddRoutine from './AddRoutine';
 import RenderRoutine from '../../components/flatlists/RenderRoutine';
 import Detail from '../../components/modals/Detail';
@@ -25,52 +25,33 @@ class Routine extends React.Component {
 
   handleSetDetailModalVisible = (visible, routine) => {
     this.props.setDetailModalVisible(visible, routine);
-  }
+  };
 
   addRoutine = (name, count) => {
     if(name.length > 0) {
       this.props.addRoutine(name, count);
     } else {
       Vibration.vibrate(8);
-    }
-  }
+    };
+  };
 
   deleteRoutine = (key) => {
     this.props.deleteRoutine(key);
-  }
+  };
 
   setProgress = (key, date) => {
     Vibration.vibrate(4);
     this.props.updateProgress(key, date, this.props.routines);
-  }
-
-  getDateView = () => {
-    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    const date = [];
-    for(let i = 0; i < 5;i++) {
-      date.push(
-        <View key={i} style={{flex:1, alignItems: "center"}}>
-          <Text style={styles.time}>{days[moment().subtract(i, "days").day()]}</Text>
-          <Text style={styles.time}>{moment().subtract(i, "days").date()}</Text>
-        </View>
-      )
-    }
-    return date;
-  }
+  };
 
   render() {
     return (
       <View style={styles.homeContainer}>
-        <View style={styles.headerContainer}>
-          <View style={styles.headerLeftContainer}>
-            <TouchableOpacity>
-              <Ionicons style={styles.icon} name="md-add" size={28} color="white" onPress={ this.handleSetInputModalVisible } />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.headerRightContainer}>
-            {this.getDateView()}
-          </View>
-        </View>
+        <Header
+          inputModalVisible={this.props.inputModalVisible}
+          setInputModalVisible={ this.props.setInputModalVisible }
+        />
+        <Date />
         <View style={styles.mainContainer}>
           <FlatList
             style={styles.listContainer}
@@ -84,23 +65,23 @@ class Routine extends React.Component {
         <Detail visible={this.props.detailModalVisible} handleShowDetail={this.handleSetDetailModalVisible} selectedRoutine={this.props.selectedRoutine} deleteRoutine={this.deleteRoutine} />
       </View>
     );
-  }
-}
+  };
+};
 
 const styles = StyleSheet.create({
-  headerContainer: {
-    backgroundColor: "#000",
+  dateContainer: {
+    backgroundColor: "#111",
     height: 48,
     width: "100%",
     paddingTop: 10,
     paddingBottom: 10,
     flexDirection: "row"
   },
-  headerLeftContainer: {
+  dateLeftContainer: {
     flex: 1,
     flexDirection: "row",
   },
-  headerRightContainer: {
+  dateRightContainer: {
     flex: 1,
     flexDirection: "row",
   },
@@ -143,4 +124,4 @@ const mapDispatchToProps = dispatch => ({
   setDetailModalVisible: (visible, routine) => dispatch(setDetailModalVisible(visible, routine)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Routine)
+export default connect(mapStateToProps, mapDispatchToProps)(Routine);

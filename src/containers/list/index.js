@@ -20,7 +20,6 @@ class List extends React.Component {
   }
 
   setLists = (name) => {
-    console.log(1);
     this.props.addTask(name);
   }
 
@@ -97,7 +96,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  console.log(state);
   return ({
     tasks: state.lists.tasks,
   });

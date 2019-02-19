@@ -36,30 +36,29 @@ class User extends React.Component {
     } else {
       return (
         <View>
-            <TextInput
-              value={this.props.email}
-              placeholder="Email"
-              style={styles.textInput}
-              onChangeText={(value) => this.props.changeLoginEmail(value)}
-            />
-            <TextInput
-              value={this.props.password}
-              placeholder="Password"
-              style={styles.textInput}
-              onChangeText={(value) => this.props.changeLoginPassword(value)}
-              secureTextEntry={true}
-            />
-            <View style={styles.buttonContainer}>
-              <View style={styles.login}><Button color="#222" title="Login" onPress={ () => this.logIn(this.props.email, this.props.password) } /></View>
-              <View style={styles.login}><Button color="#222" title="SignUp" onPress={ () => this.signUp(this.props.email, this.props.password) } /></View>
-            </View>
+          <TextInput
+            value={this.props.email}
+            placeholder="Email"
+            style={styles.textInput}
+            onChangeText={(value) => this.props.changeLoginEmail(value)}
+          />
+          <TextInput
+            value={this.props.password}
+            placeholder="Password"
+            style={styles.textInput}
+            onChangeText={(value) => this.props.changeLoginPassword(value)}
+            secureTextEntry={true}
+          />
+          <View style={styles.buttonContainer}>
+            <View style={styles.login}><Button color="#222" title="Login" onPress={ () => this.logIn(this.props.email, this.props.password) } /></View>
+            <View style={styles.login}><Button color="#222" title="SignUp" onPress={ () => this.signUp(this.props.email, this.props.password) } /></View>
+          </View>
         </View>
       )
     }
   }
 
   render() {
-    //this.props.signOut();
     if(this.props.isLoading) {
       return (
         <View style={styles.userContainer}>
