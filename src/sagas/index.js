@@ -1,6 +1,6 @@
 import { fork } from 'redux-saga/effects';
 import { handleSetRoutine, handleDeleteRoutine, handleUpdateProgress, handleGetRoutine  } from './routineSaga'
-import { handleLogin, handleSignOut, handleIsLoggedin } from './userSaga';
+import { handleLogin, handleSignOut, handleSignUp } from './userSaga';
 
 export default function* rootSaga() {
   // yield fork(handleSetRoutine);
@@ -11,4 +11,5 @@ export default function* rootSaga() {
   yield fork(handleLogin);
   // yield fork(handleSignOut);
   // yield fork(handleIsLoggedin);
+  yield fork(handleSignUp);
 };

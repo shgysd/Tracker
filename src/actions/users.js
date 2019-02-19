@@ -1,14 +1,12 @@
 import {
   CHANGE_LOGIN_EMAIL,
   CHANGE_LOGIN_PASSWORD,
-  SIGNUP,
   LOGIN,
-  SUCCESS_LOGIN,
   SIGNOUT,
+  SIGNUP,
+  SUCCESS_LOGIN,
   SUCCESS_SIGNOUT,
-  IS_LOGGEDIN,
-  SUCCESS_IS_LOGGEDIN,
-  FAILURE_IS_LOGGEDIN
+  SUCCESS_SIGNUP
 } from '../consistants/actionTypes';
 
 export const changeLoginEmail = (email) => {
@@ -25,15 +23,23 @@ export const changeLoginPassword = (password) => {
   };
 }
 
-export const signUp = () => {
-  return {
-    type: SIGNUP
-  };
-}
-
 export const login = (email, password) => {
   return {
     type: LOGIN,
+    email,
+    password
+  };
+}
+
+export const signOut = () => {
+  return {
+    type: SIGNOUT
+  };
+}
+
+export const signUp = (email, password) => {
+  return {
+    type: SIGNUP,
     email,
     password
   };
@@ -46,34 +52,15 @@ export const successLogin = (uid) => {
   };
 }
 
-export const signOut = () => {
-  return {
-    type: SIGNOUT
-  };
-}
-
 export const successSignOut = () => {
   return {
     type: SUCCESS_SIGNOUT
   };
 }
 
-export const isLoggedin = () => {
+export const successSignUp = (uid) => {
   return {
-    type: IS_LOGGEDIN
-  };
-}
-
-export const successIsLoggedin = (uid) => {
-  return {
-    type: SUCCESS_IS_LOGGEDIN,
-    uid
-  };
-}
-
-export const failureIsLoggedin = (uid) => {
-  return {
-    type: FAILURE_IS_LOGGEDIN,
+    type: SUCCESS_SIGNUP,
     uid
   };
 }

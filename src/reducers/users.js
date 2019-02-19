@@ -1,14 +1,12 @@
 import {
   CHANGE_LOGIN_EMAIL,
   CHANGE_LOGIN_PASSWORD,
-  SIGNUP,
   LOGIN,
-  SUCCESS_LOGIN,
   SIGNOUT,
+  SIGNUP,
+  SUCCESS_LOGIN,
   SUCCESS_SIGNOUT,
-  IS_LOGGEDIN,
-  SUCCESS_IS_LOGGEDIN,
-  FAILURE_IS_LOGGEDIN
+  SUCCESS_SIGNUP
 } from '../consistants/actionTypes'
 
 const initialState = {
@@ -30,19 +28,25 @@ const reducer = (state = initialState, action) => {
         ...state,
         password: action.password
       }
-    case SIGNUP:
-      return {
-        ...state,
-        email: action.email,
-        password: action.password,
-        isLoading: true
-      }
     case LOGIN:
       return {
         ...state,
         email: action.email,
         password: action.password,
         isLoading: true
+      }
+    case SIGNOUT:
+      return {
+        ...state,
+        uid: null,
+        isLoading: false
+      }
+    case SIGNUP:
+      return {
+        ...state,
+        email: action.email,
+        password: action.password,
+        isLoading: false
       }
     case SUCCESS_LOGIN:
       return {
@@ -52,11 +56,6 @@ const reducer = (state = initialState, action) => {
         email: '',
         password: '',
       }
-    case SIGNOUT:
-      return {
-        ...state,
-        uid: null
-      }
     case SUCCESS_SIGNOUT:
       return {
         ...state,
@@ -65,22 +64,13 @@ const reducer = (state = initialState, action) => {
         email: '',
         password: ''
       }
-    case IS_LOGGEDIN:
-      return {
-        ...state,
-        isLoading: true
-      }
-    case SUCCESS_IS_LOGGEDIN:
+    case SUCCESS_SIGNUP:
       return {
         ...state,
         uid: action.uid,
-        isLoading: false
-      }
-    case FAILURE_IS_LOGGEDIN:
-      return {
-        ...state,
-        uid: action.uid,
-        isLoading: false
+        isLoading: false,
+        email: '',
+        password: ''
       }
     default:
       return state;

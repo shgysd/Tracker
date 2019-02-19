@@ -1,6 +1,6 @@
 import { call, put, take } from 'redux-saga/effects';
 import { AsyncStorage } from 'react-native';
-import { successLogin, successSignOut, successIsLoggedin, failureIsLoggedin } from '../actions/users';
+import { successLogin, successSignOut, successSignUp } from '../actions/users';
 import * as firebase from 'firebase';
 import db from '../configs/firebase';
 
@@ -11,31 +11,6 @@ export function* handleLogin() {
     if (payload && !error) {
       yield put(successLogin(payload));
     } else {
-      console.log(error);
-    }
-  }
-}
-
-export function* handleSignOut() {
-  while (true) {
-    const action = yield take("SIGNOUT");
-    const {payload, error} = yield call(signOut);
-    if (payload && !error) {
-      yield put(successSignOut(payload));
-    } else {
-      console.log(error);
-    }
-  }
-}
-
-export function* handleIsLoggedin() {
-  while (true) {
-    const action = yield take("IS_LOGGEDIN");
-    const {payload, error} = yield call(isLoggedin);
-    if (payload && !error) {
-      yield put(successIsLoggedin(payload));
-    } else {
-      yield put(failureIsLoggedin(payload));
       console.log(error);
     }
   }
@@ -58,6 +33,18 @@ const login = async (email, password) => {
   }
 }
 
+export function* handleSignOut() {
+  while (true) {
+    const action = yield take("SIGNOUT");
+    const {payload, error} = yield call(signOut);
+    if (payload && !error) {
+      yield put(successSignOut(payload));
+    } else {
+      console.log(error);
+    }
+  }
+}
+
 const signOut = async () => {
   try {
     await firebase.auth().signOut().catch(error => {
@@ -76,18 +63,25 @@ const signOut = async () => {
   }
 }
 
-const isLoggedin = async () => {
-  try {
-    let uid = null;
-    await AsyncStorage.getItem('uid').then((id) => {
-      if(id) {
-        uid = id;
-      }
-    }).catch(error => {
+export function* handleSignUp() {
+  while (true) {
+    const action = yield take("SIGNUP");
+    const { uid, error } = yield call(signUp, action.email, action.password);
+    if (uid && !error) {
+      yield put(successSignUp(uid));
+    } else {
       console.log(error);
-      throw new Error(error);
-    });
-    return { payload: uid};
+    }
+  }
+}
+
+const signUp = async (email, password) => {
+  try {
+    const result = firebase.auth().createUserWithEmailAndPassword(email, password)
+      .catch((error) => {
+        throw new Error(error);
+      });
+    return { uid: result.user.uid };
   } catch (error) {
     console.log(error);
     return { error };

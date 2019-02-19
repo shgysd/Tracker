@@ -3,7 +3,7 @@ import { AsyncStorage, StyleSheet, Button, View, TextInput, StatusBar, Text } fr
 import * as firebase from 'firebase';
 import { connect } from 'react-redux';
 
-import { changeLoginEmail, changeLoginPassword, login, signOut, isLoggedin } from '../../actions/users'
+import { changeLoginEmail, changeLoginPassword, login, signOut, signUp } from '../../actions/users'
 
 class User extends React.Component {
   state = {
@@ -13,19 +13,16 @@ class User extends React.Component {
     isLoading: false
   };
 
-  logIn = async (email, password) => {
+  logIn = (email, password) => {
     this.props.login(email, password);
   };
 
-  signUp = async (email, password) => {
-    firebase.auth().createUserWithEmailAndPassword(email, password).catch((error) => {
-      const { code, message } = error;
-      alert(message);
-    });
+  signOut = () => {
+    this.props.signOut();
   };
 
-  signOut = async () => {
-    this.props.signOut();
+  signUp = (email, password) => {
+    this.props.signUp(email, password);
   };
 
   UserScreen = () => {
@@ -62,6 +59,7 @@ class User extends React.Component {
   }
 
   render() {
+    //this.props.signOut();
     if(this.props.isLoading) {
       return (
         <View style={styles.userContainer}>
@@ -139,7 +137,7 @@ const mapDispatchToProps = dispatch => ({
   changeLoginPassword: (password) => dispatch(changeLoginPassword(password)),
   login: (email, password) => dispatch(login(email, password)),
   signOut: () => dispatch(signOut()),
-  isLoggedin: () => dispatch(isLoggedin()),
+  signUp: (email, password) => dispatch(signUp(email, password))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(User)
+export default connect(mapStateToProps, mapDispatchToProps)(User);
