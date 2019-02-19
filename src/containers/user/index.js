@@ -62,7 +62,7 @@ class User extends React.Component {
   }
 
   render() {
-    if(false) {
+    if(this.props.isLoading) {
       return (
         <View style={styles.userContainer}>
           <View style={styles.headerContainer}>

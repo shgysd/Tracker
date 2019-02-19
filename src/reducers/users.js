@@ -12,8 +12,8 @@ import {
 } from '../consistants/actionTypes'
 
 const initialState = {
-  email: "",
-  password: "",
+  email: '',
+  password: '',
   uid: null,
   isLoading: false
 };
@@ -48,19 +48,22 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         uid: action.uid,
-        isLoading: false
+        isLoading: false,
+        email: '',
+        password: '',
       }
     case SIGNOUT:
       return {
-        ...state
+        ...state,
+        uid: null
       }
     case SUCCESS_SIGNOUT:
       return {
         ...state,
         uid: null,
         isLoading: false,
-        email: "",
-        password: ""
+        email: '',
+        password: ''
       }
     case IS_LOGGEDIN:
       return {

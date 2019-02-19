@@ -11,14 +11,14 @@ import {
   FAILURE_IS_LOGGEDIN
 } from '../consistants/actionTypes';
 
-export const changeLoginEmail = (email: string) => {
+export const changeLoginEmail = (email) => {
   return {
     type: CHANGE_LOGIN_EMAIL,
     email
   };
 }
 
-export const changeLoginPassword = (password: string) => {
+export const changeLoginPassword = (password) => {
   return {
     type: CHANGE_LOGIN_PASSWORD,
     password
@@ -31,7 +31,7 @@ export const signUp = () => {
   };
 }
 
-export const login = (email: string, password: string) => {
+export const login = (email, password) => {
   return {
     type: LOGIN,
     email,
@@ -39,7 +39,7 @@ export const login = (email: string, password: string) => {
   };
 }
 
-export const successLogin = (uid: string) => {
+export const successLogin = (uid) => {
   return {
     type: SUCCESS_LOGIN,
     uid
@@ -64,14 +64,14 @@ export const isLoggedin = () => {
   };
 }
 
-export const successIsLoggedin = (uid: string) => {
+export const successIsLoggedin = (uid) => {
   return {
     type: SUCCESS_IS_LOGGEDIN,
     uid
   };
 }
 
-export const failureIsLoggedin = (uid: string) => {
+export const failureIsLoggedin = (uid) => {
   return {
     type: FAILURE_IS_LOGGEDIN,
     uid
