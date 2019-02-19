@@ -1,15 +1,14 @@
 import { call, put, take } from 'redux-saga/effects';
-import { AsyncStorage } from 'react-native';
-import { successLogin, successSignOut, successSignUp } from '../actions/users';
 import * as firebase from 'firebase';
-import db from '../configs/firebase';
+
+import { successLogin, successSignOut, successSignUp } from '../actions/users';
 
 export function* handleLogin() {
   while (true) {
     const action = yield take("LOGIN");
-    const {payload, error} = yield call(login, action.email, action.password);
-    if (payload && !error) {
-      yield put(successLogin(payload));
+    const { uid, error } = yield call(login, action.email, action.password);
+    if (uid && !error) {
+      yield put(successLogin(uid));
     } else {
       console.log(error);
     }
@@ -18,15 +17,12 @@ export function* handleLogin() {
 
 const login = async (email, password) => {
   try {
-    let uid = null;
-    await firebase.auth().signInWithEmailAndPassword(email, password).then((user) => {
-      AsyncStorage.setItem('uid', JSON.stringify(user.user.uid));
-      uid = user.user.uid;
+    const uid = await firebase.auth().signInWithEmailAndPassword(email, password).then((user) => {
+      return user.user.uid;
     }).catch((error) => {
-      console.log(error);
       throw new Error(error);
     });
-    return { payload: uid};
+    return { uid };
   } catch (error) {
     console.log(error);
     return { error };
@@ -77,7 +73,7 @@ export function* handleSignUp() {
 
 const signUp = async (email, password) => {
   try {
-    const result = firebase.auth().createUserWithEmailAndPassword(email, password)
+    const result = await firebase.auth().createUserWithEmailAndPassword(email, password)
       .catch((error) => {
         throw new Error(error);
       });
