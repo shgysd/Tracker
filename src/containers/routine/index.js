@@ -19,7 +19,7 @@ import {
   getRoutineFromCache ,
   sortByName,
   sortByCreated,
-  sortByRate
+  sortByCompleted
 } from '../../actions/routines';
 
 class Routine extends React.Component {
@@ -81,7 +81,7 @@ class Routine extends React.Component {
           handleVisible={() => this.props.setSortModalVisible(!this.props.sortModalVisible)}
           sortByName={ () => this.props.sortByName() }
           sortByCreated={ () => this.props.sortByCreated() }
-          sortByRate={ () => this.props.sortByRate() }
+          sortByCompleted={ () => this.props.sortByCompleted() }
         />
         <AddRoutine visible={this.props.inputModalVisible} handleVisible={() => this.props.setInputModalVisible(!this.props.inputModalVisible)} createRoutine={this.addRoutine} />
         <Detail visible={this.props.detailModalVisible} handleShowDetail={this.handleSetDetailModalVisible} selectedRoutine={this.props.selectedRoutine} deleteRoutine={this.deleteRoutine} />
@@ -151,7 +151,7 @@ const mapDispatchToProps = dispatch => ({
   setSortModalVisible: (visible) => dispatch(setSortModalVisible(visible)),
   sortByName: () => dispatch(sortByName()),
   sortByCreated: () => dispatch(sortByCreated()),
-  sortByRate: () => dispatch(sortByRate())
+  sortByCompleted: () => dispatch(sortByCompleted())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Routine);

@@ -15,7 +15,7 @@ import {
   SUBMIT_ADD_ROUTINE,
   SORT_BY_NAME,
   SORT_BY_CREATED,
-  SORT_BY_RATE
+  SORT_BY_COMPLETED
 } from '../consistants/actionTypes'
 
 export const setInputModalVisible = (visible) => {
@@ -124,8 +124,8 @@ export const sortByCreated = () => {
   };
 }
 
-export const sortByRate = () => {
+export const sortByCompleted = () => {
   return {
-    type: SORT_BY_RATE
+    type: SORT_BY_COMPLETED
   };
 }

@@ -8,14 +8,14 @@ const sort = (props) => {
         <View style={styles.modalContainer} >
           <TouchableWithoutFeedback onPress={() => {}}>
             <View style={styles.innerContainer}>
-              <TouchableWithoutFeedback onPress={ props.sortByName }>
-                <View style={styles.sortContainer}><Text style={styles.sortText}>Name</Text></View>
+              <TouchableWithoutFeedback onPress={ props.sortByCompleted }>
+                <View style={styles.sortContainer}><Text style={styles.sortText}>Completed</Text></View>
               </TouchableWithoutFeedback>
               <TouchableWithoutFeedback onPress={ props.sortByCreated }>
                 <View style={styles.sortContainer}><Text style={styles.sortText}>Created</Text></View>
               </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={ props.sortByRate }>
-                <View style={styles.sortContainer}><Text style={styles.sortText}>Rate</Text></View>
+              <TouchableWithoutFeedback onPress={ props.sortByName }>
+                <View style={styles.sortContainer}><Text style={styles.sortText}>Name</Text></View>
               </TouchableWithoutFeedback>
             </View>
           </TouchableWithoutFeedback>

@@ -15,7 +15,7 @@ import {
   SUBMIT_ADD_ROUTINE,
   SORT_BY_NAME,
   SORT_BY_CREATED,
-  SORT_BY_RATE
+  SORT_BY_COMPLETED
 } from '../consistants/actionTypes';
 
 import moment from 'moment';
@@ -150,7 +150,7 @@ const reducer = (state = initialState, action) => {
         sortModalVisible: false,
         routines: sortByCreated
       }
-    case SORT_BY_RATE:
+    case SORT_BY_COMPLETED:
       const sortByRate = state.routines.slice();
       sortByRate.sort((a, b) => {
         const completedA = a.progress.filter((value) => {
