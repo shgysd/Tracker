@@ -13,7 +13,7 @@ const header = (props) => {
           <AntDesign style={styles.icon} name="plussquareo" size={22} color="#ccc" onPress={ () => props.setInputModalVisible(!props.inputModalVisible) } />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Feather style={styles.icon} name="filter" size={22} color="#ccc" onPress={ this.handleSetInputModalVisible } />
+          <Feather style={styles.icon} name="filter" size={22} color="#ccc" onPress={ () => props.setSortModalVisible(!props.sortModalVisible) } />
         </TouchableOpacity>
         <TouchableOpacity>
           <Feather style={styles.icon} name="settings" size={22} color="#ccc" onPress={ this.handleSetInputModalVisible } />

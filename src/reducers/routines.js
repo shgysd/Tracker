@@ -1,6 +1,7 @@
 import {
   SET_INPUT_MODAL_VISIBLE,
   SET_DETAIL_MODAL_VISIBLE,
+  SET_SORT_MODAL_VISIBLE,
   ADD_ROUTINE,
   DELETE_ROUTINE,
   UPDATE_PROGRESS,
@@ -11,7 +12,10 @@ import {
   SUCCESS_UPDATE_PROGRESS,
   CHANGE_ROUTINE_TITLE,
   CHANGE_DEFAULT_COUNT,
-  SUBMIT_ADD_ROUTINE
+  SUBMIT_ADD_ROUTINE,
+  SORT_BY_NAME,
+  SORT_BY_CREATED,
+  SORT_BY_RATE
 } from '../consistants/actionTypes';
 
 import moment from 'moment';
@@ -22,7 +26,8 @@ const initialState = {
   detailModalVisible: false,
   selectedRoutine: null,
   name: "",
-  count: 1
+  count: 1,
+  sortModalVisible: false
 };
 
 const reducer = (state = initialState, action) => {
@@ -37,6 +42,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         detailModalVisible: action.visible,
         selectedRoutine: action.routine
+      }
+    case SET_SORT_MODAL_VISIBLE:
+      return {
+        ...state,
+        sortModalVisible: action.visible
       }
     case ADD_ROUTINE:
       const key = generateKey(16);
@@ -117,6 +127,47 @@ const reducer = (state = initialState, action) => {
         ...state,
         name: "",
         count: 1
+      }
+    case SORT_BY_NAME:
+      const sortByName = state.routines.slice();
+      sortByName.sort((a, b) => {
+        if(a.name < b.name) { return -1; }
+        if(a.name > b.name) { return 1; }
+        return 0;
+      });
+      return {
+        ...state,
+        sortModalVisible: false,
+        routines: sortByName
+      }
+    case SORT_BY_CREATED:
+      const sortByCreated = state.routines.slice();
+      sortByCreated.sort((a, b) => {
+        return new Date(a.createdAt) - new Date(b.createdAt);
+      });
+      return {
+        ...state,
+        sortModalVisible: false,
+        routines: sortByCreated
+      }
+    case SORT_BY_RATE:
+      const sortByRate = state.routines.slice();
+      sortByRate.sort((a, b) => {
+        const completedA = a.progress.filter((value) => {
+          return value.count === 0;
+        });
+        const completedB = b.progress.filter((value) => {
+          return value.count === 0;
+        });
+
+        if(completedA.length < completedB.length) { return 1; }
+        if(completedA.length > completedB.length) { return -1; }
+        return 0;
+      });
+      return {
+        ...state,
+        sortModalVisible: false,
+        routines: sortByRate
       }
     default:
       return state;

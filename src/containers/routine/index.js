@@ -2,19 +2,32 @@ import React from 'react';
 import { StyleSheet, Text, View, FlatList, StatusBar, TouchableOpacity, Vibration, AsyncStorage } from 'react-native';
 import { Permissions, Notifications } from 'expo';
 import { connect } from 'react-redux';
-import { setInputModalVisible, setDetailModalVisible, addRoutine, deleteRoutine, updateProgress, getRoutineFromCache } from '../../actions/routines';
 
 import Header from '../../components/header';
 import Date from '../../components/date';
 import AddRoutine from './AddRoutine';
+import Sort from '../../components/modals/Sort';
 import RenderRoutine from '../../components/flatlists/RenderRoutine';
 import Detail from '../../components/modals/Detail';
+
+import {
+  setInputModalVisible,
+  setDetailModalVisible,
+  setSortModalVisible,
+  addRoutine, deleteRoutine,
+  updateProgress,
+  getRoutineFromCache ,
+  sortByName,
+  sortByCreated,
+  sortByRate
+} from '../../actions/routines';
 
 class Routine extends React.Component {
   state = {
     routines: [],
     inputModalVisible: false,
     detailModalVisible: false,
+    sortModalVisible: false,
     selectedRoutine: null
   };
 
@@ -50,6 +63,8 @@ class Routine extends React.Component {
         <Header
           inputModalVisible={this.props.inputModalVisible}
           setInputModalVisible={ this.props.setInputModalVisible }
+          sortModalVisible={this.props.sortModalVisible}
+          setSortModalVisible={ this.props.setSortModalVisible }
         />
         <Date />
         <View style={styles.mainContainer}>
@@ -61,6 +76,13 @@ class Routine extends React.Component {
             )}
           />
         </View>
+        <Sort
+          visible={this.props.sortModalVisible}
+          handleVisible={() => this.props.setSortModalVisible(!this.props.sortModalVisible)}
+          sortByName={ () => this.props.sortByName() }
+          sortByCreated={ () => this.props.sortByCreated() }
+          sortByRate={ () => this.props.sortByRate() }
+        />
         <AddRoutine visible={this.props.inputModalVisible} handleVisible={() => this.props.setInputModalVisible(!this.props.inputModalVisible)} createRoutine={this.addRoutine} />
         <Detail visible={this.props.detailModalVisible} handleShowDetail={this.handleSetDetailModalVisible} selectedRoutine={this.props.selectedRoutine} deleteRoutine={this.deleteRoutine} />
       </View>
@@ -107,13 +129,17 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => ({
-  uid: state.users.uid,
-  routines: state.routines.routines,
-  inputModalVisible: state.routines.inputModalVisible,
-  detailModalVisible: state.routines.detailModalVisible,
-  selectedRoutine: state.routines.selectedRoutine
-});
+const mapStateToProps = state => {
+  console.log(state);
+  return({
+    uid: state.users.uid,
+    routines: state.routines.routines,
+    inputModalVisible: state.routines.inputModalVisible,
+    detailModalVisible: state.routines.detailModalVisible,
+    sortModalVisible: state.routines.sortModalVisible,
+    selectedRoutine: state.routines.selectedRoutine
+  });
+};
 
 const mapDispatchToProps = dispatch => ({
   addRoutine: (name, count) => dispatch(addRoutine(name, count)),
@@ -122,6 +148,10 @@ const mapDispatchToProps = dispatch => ({
   getRoutineFromCache: () => dispatch(getRoutineFromCache()),
   setInputModalVisible: (visible) => dispatch(setInputModalVisible(visible)),
   setDetailModalVisible: (visible, routine) => dispatch(setDetailModalVisible(visible, routine)),
+  setSortModalVisible: (visible) => dispatch(setSortModalVisible(visible)),
+  sortByName: () => dispatch(sortByName()),
+  sortByCreated: () => dispatch(sortByCreated()),
+  sortByRate: () => dispatch(sortByRate())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Routine);

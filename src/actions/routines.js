@@ -1,6 +1,7 @@
 import {
   SET_INPUT_MODAL_VISIBLE,
   SET_DETAIL_MODAL_VISIBLE,
+  SET_SORT_MODAL_VISIBLE,
   ADD_ROUTINE,
   DELETE_ROUTINE,
   UPDATE_PROGRESS,
@@ -11,7 +12,10 @@ import {
   SUCCESS_GET_ROUTINE,
   CHANGE_ROUTINE_TITLE,
   CHANGE_DEFAULT_COUNT,
-  SUBMIT_ADD_ROUTINE
+  SUBMIT_ADD_ROUTINE,
+  SORT_BY_NAME,
+  SORT_BY_CREATED,
+  SORT_BY_RATE
 } from '../consistants/actionTypes'
 
 export const setInputModalVisible = (visible) => {
@@ -26,6 +30,13 @@ export const setDetailModalVisible = (visible, routine) => {
     type: SET_DETAIL_MODAL_VISIBLE,
     visible,
     routine
+  };
+}
+
+export const setSortModalVisible = (visible) => {
+  return {
+    type: SET_SORT_MODAL_VISIBLE,
+    visible
   };
 }
 
@@ -50,12 +61,6 @@ export const updateProgress = (key, date, routines) => {
     key,
     date,
     routines
-  };
-}
-
-export const getRoutineFromCache = () => {
-  return {
-    type: GET_ROUTINE_FROM_CACHE,
   };
 }
 
@@ -104,5 +109,23 @@ export const changeDefaultCount = (count) => {
 export const submitAddRoutine = () => {
   return {
     type: SUBMIT_ADD_ROUTINE
+  };
+}
+
+export const sortByName = () => {
+  return {
+    type: SORT_BY_NAME
+  };
+}
+
+export const sortByCreated = () => {
+  return {
+    type: SORT_BY_CREATED
+  };
+}
+
+export const sortByRate = () => {
+  return {
+    type: SORT_BY_RATE
   };
 }
