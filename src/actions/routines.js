@@ -2,10 +2,11 @@ import {
   SET_INPUT_MODAL_VISIBLE,
   SET_DETAIL_MODAL_VISIBLE,
   SET_SORT_MODAL_VISIBLE,
+  SET_PROGRESS_MODAL_VISIBLE,
   ADD_ROUTINE,
   DELETE_ROUTINE,
   UPDATE_PROGRESS,
-  GET_ROUTINE_FROM_CACHE,
+  COMPLETE_PROGRESS,
   SUCCESS_ADD_ROUTINE,
   SUCCESS_DELETE_ROUTINE,
   SUCCESS_UPDATE_PROGRESS,
@@ -40,6 +41,13 @@ export const setSortModalVisible = (visible) => {
   };
 }
 
+export const setProgressModalVisible = (visible) => {
+  return {
+    type: SET_PROGRESS_MODAL_VISIBLE,
+    visible
+  };
+}
+
 export const addRoutine = (name, count) => {
   return {
     type: ADD_ROUTINE,
@@ -55,12 +63,19 @@ export const deleteRoutine = (key) => {
   };
 }
 
-export const updateProgress = (key, date, routines) => {
+export const updateProgress = (key, date) => {
   return {
     type: UPDATE_PROGRESS,
     key,
-    date,
-    routines
+    date
+  };
+}
+
+export const completeProgress = (key, date) => {
+  return {
+    type: COMPLETE_PROGRESS,
+    key,
+    date
   };
 }
 

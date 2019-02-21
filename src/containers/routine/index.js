@@ -7,15 +7,19 @@ import Header from '../../components/header';
 import Date from '../../components/date';
 import AddRoutine from './AddRoutine';
 import Sort from '../../components/modals/Sort';
+import Progress from '../../components/modals/Progress';
 import RenderRoutine from '../../components/flatlists/RenderRoutine';
 import Detail from '../../components/modals/Detail';
+
 
 import {
   setInputModalVisible,
   setDetailModalVisible,
   setSortModalVisible,
+  setProgressModalVisible,
   addRoutine, deleteRoutine,
   updateProgress,
+  completeProgress,
   getRoutineFromCache ,
   sortByName,
   sortByCreated,
@@ -54,7 +58,12 @@ class Routine extends React.Component {
 
   setProgress = (key, date) => {
     Vibration.vibrate(4);
-    this.props.updateProgress(key, date, this.props.routines);
+    this.props.updateProgress(key, date);
+  };
+
+  completeProgress = (key, date) => {
+    Vibration.vibrate(4);
+    this.props.completeProgress(key, date);
   };
 
   render() {
@@ -83,8 +92,25 @@ class Routine extends React.Component {
           sortByCreated={ () => this.props.sortByCreated() }
           sortByCompleted={ () => this.props.sortByCompleted() }
         />
-        <AddRoutine visible={this.props.inputModalVisible} handleVisible={() => this.props.setInputModalVisible(!this.props.inputModalVisible)} createRoutine={this.addRoutine} />
-        <Detail visible={this.props.detailModalVisible} handleShowDetail={this.handleSetDetailModalVisible} selectedRoutine={this.props.selectedRoutine} deleteRoutine={this.deleteRoutine} />
+        <AddRoutine
+          visible={this.props.inputModalVisible}
+          handleVisible={() => this.props.setInputModalVisible(!this.props.inputModalVisible)}
+          createRoutine={this.addRoutine}
+        />
+        <Detail
+          visible={this.props.detailModalVisible}
+          handleShowDetail={this.handleSetDetailModalVisible}
+          setProgressModalVisible={() => this.props.setProgressModalVisible(!this.props.progressModalVisible)}
+          selectedRoutine={this.props.selectedRoutine}
+          deleteRoutine={this.deleteRoutine}
+          handleVisible={() => this.props.setInputModalVisible(!this.props.inputModalVisible)}
+        />
+        <Progress
+          visible={this.props.progressModalVisible}
+          selectedRoutine={this.props.selectedRoutine}
+          setProgressModalVisible={() => this.props.setProgressModalVisible(!this.props.progressModalVisible)}
+          completeProgress={ this.completeProgress }
+        />
       </View>
     );
   };
@@ -130,13 +156,13 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  console.log(state);
   return({
     uid: state.users.uid,
     routines: state.routines.routines,
     inputModalVisible: state.routines.inputModalVisible,
     detailModalVisible: state.routines.detailModalVisible,
     sortModalVisible: state.routines.sortModalVisible,
+    progressModalVisible: state.routines.progressModalVisible,
     selectedRoutine: state.routines.selectedRoutine
   });
 };
@@ -145,10 +171,12 @@ const mapDispatchToProps = dispatch => ({
   addRoutine: (name, count) => dispatch(addRoutine(name, count)),
   deleteRoutine: (routine) => dispatch(deleteRoutine(routine)),
   updateProgress: (key, date, routine) => dispatch(updateProgress(key, date, routine)),
+  completeProgress: (key, date, routine) => dispatch(completeProgress(key, date, routine)),
   getRoutineFromCache: () => dispatch(getRoutineFromCache()),
   setInputModalVisible: (visible) => dispatch(setInputModalVisible(visible)),
   setDetailModalVisible: (visible, routine) => dispatch(setDetailModalVisible(visible, routine)),
   setSortModalVisible: (visible) => dispatch(setSortModalVisible(visible)),
+  setProgressModalVisible: (visible) => dispatch(setProgressModalVisible(visible)),
   sortByName: () => dispatch(sortByName()),
   sortByCreated: () => dispatch(sortByCreated()),
   sortByCompleted: () => dispatch(sortByCompleted())

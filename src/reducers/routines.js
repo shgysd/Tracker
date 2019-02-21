@@ -2,10 +2,11 @@ import {
   SET_INPUT_MODAL_VISIBLE,
   SET_DETAIL_MODAL_VISIBLE,
   SET_SORT_MODAL_VISIBLE,
+  SET_PROGRESS_MODAL_VISIBLE,
   ADD_ROUTINE,
   DELETE_ROUTINE,
   UPDATE_PROGRESS,
-  GET_ROUTINE_FROM_CACHE,
+  COMPLETE_PROGRESS,
   SUCCESS_ADD_ROUTINE,
   SUCCESS_DELETE_ROUTINE,
   SUCCESS_GET_ROUTINE,
@@ -24,10 +25,11 @@ const initialState = {
   routines: [],
   inputModalVisible: false,
   detailModalVisible: false,
+  sortModalVisible: false,
+  progressModalVisible: false,
   selectedRoutine: null,
   name: "",
   count: 1,
-  sortModalVisible: false
 };
 
 const reducer = (state = initialState, action) => {
@@ -47,6 +49,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         sortModalVisible: action.visible
+      }
+    case SET_PROGRESS_MODAL_VISIBLE:
+      return {
+        ...state,
+        progressModalVisible: action.visible
       }
     case ADD_ROUTINE:
       const key = generateKey(16);
@@ -71,11 +78,13 @@ const reducer = (state = initialState, action) => {
           if(routine.key === action.key) {
             const progress = routine.progress.find(item => {
               if(item.date === action.date) {
+
                 if(0 < item.count) {
                   item.count -= 1;
                 } else {
                   item.count = routine.count;
                 }
+
               }
               return item.date === action.date;
             });
@@ -87,8 +96,31 @@ const reducer = (state = initialState, action) => {
           return routine;
         })
       }
-    case GET_ROUTINE_FROM_CACHE:
-      return state
+    case COMPLETE_PROGRESS:
+      return {
+        ...state,
+        routines: state.routines.map(routine =>{
+          if(routine.key === action.key) {
+            const progress = routine.progress.find(item => {
+              if(item.date === action.date) {
+
+                if(0 < item.count) {
+                  item.count = 0;
+                } else {
+                  item.count = routine.count;
+                }
+
+              }
+              return item.date === action.date;
+            });
+
+            if(!progress) {
+              routine.progress = routine.progress.concat({ date: action.date, count: routine.count - 1 });
+            };
+          }
+          return routine;
+        })
+      }
     case SUCCESS_ADD_ROUTINE:
       return {
         ...state,

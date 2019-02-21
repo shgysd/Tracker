@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Modal, ScrollView,Button } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, Feather } from '@expo/vector-icons';
 import moment from 'moment';
 
 class Detail extends React.Component {
@@ -28,14 +28,22 @@ class Detail extends React.Component {
         if(i === 0) {
           for(let n = 0; n < moment().day() + 1; n++) {
             days.unshift((
-              <View key={n} style={this.checkComplete(selectedRoutine, moment().subtract(count, 'days').format('MM-DD-YYYY'))}><Text style={styles.date}>{moment().subtract(count, 'days').date()}</Text></View>
+              <View key={n} style={this.checkComplete(selectedRoutine, moment().subtract(count, 'days').format('MM-DD-YYYY'))}>
+                <Text style={ moment(selectedRoutine.createdAt).format('MM-DD-YYYY') === moment().subtract(count, 'days').format('MM-DD-YYYY') ? styles.createdAt : styles.date }>
+                  {moment().subtract(count, 'days').date()}
+                </Text>
+              </View>
             ))
             count++;
           }
         } else {
           for(let n = 0; n < 7; n++) {
             days.unshift((
-              <View key={n} style={this.checkComplete(selectedRoutine, moment().subtract(count, 'days').format('MM-DD-YYYY'))}><Text style={styles.date}>{moment().subtract(count, 'days').date()}</Text></View>
+              <View key={n} style={this.checkComplete(selectedRoutine, moment().subtract(count, 'days').format('MM-DD-YYYY'))}>
+                <Text style={ moment(selectedRoutine.createdAt).format('MM-DD-YYYY') === moment().subtract(count, 'days').format('MM-DD-YYYY') ? styles.createdAt : styles.date }>
+                  {moment().subtract(count, 'days').date()}
+                </Text>
+              </View>
             ))
             count++;
           }
@@ -58,20 +66,29 @@ class Detail extends React.Component {
           </View>
           <View style={styles.mainContainer}>
             <View style={styles.historyContainer}>
-              <Text style={styles.history}>History</Text>
-              <View style={styles.historyViewContainer}>
-                <View>
-                  <View style={styles.dayContainer}><Text style={styles.day}>Sun</Text></View>
-                  <View style={styles.dayContainer}><Text style={styles.day}>Mon</Text></View>
-                  <View style={styles.dayContainer}><Text style={styles.day}>Tue</Text></View>
-                  <View style={styles.dayContainer}><Text style={styles.day}>Wed</Text></View>
-                  <View style={styles.dayContainer}><Text style={styles.day}>Thu</Text></View>
-                  <View style={styles.dayContainer}><Text style={styles.day}>Fri</Text></View>
-                  <View style={styles.dayContainer}><Text style={styles.day}>Sat</Text></View>
+              <View>
+                <View style={styles.historyEditContainer}>
+                  <View style={styles.historyLeft}>
+                    <Text style={styles.history}>History</Text>
+                  </View>
+                  <View style={styles.historyRight}>
+                    <Feather name="edit" size={20} color="#ccc" style={styles.icon} onPress={this.props.setProgressModalVisible} />
+                  </View>
                 </View>
-                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.listContainer}>
-                  {weeks}
-                </ScrollView>
+                <View style={styles.historyViewContainer}>
+                  <View>
+                    <View style={styles.dayContainer}><Text style={styles.day}>Sun</Text></View>
+                    <View style={styles.dayContainer}><Text style={styles.day}>Mon</Text></View>
+                    <View style={styles.dayContainer}><Text style={styles.day}>Tue</Text></View>
+                    <View style={styles.dayContainer}><Text style={styles.day}>Wed</Text></View>
+                    <View style={styles.dayContainer}><Text style={styles.day}>Thu</Text></View>
+                    <View style={styles.dayContainer}><Text style={styles.day}>Fri</Text></View>
+                    <View style={styles.dayContainer}><Text style={styles.day}>Sat</Text></View>
+                  </View>
+                  <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.listContainer}>
+                    {weeks}
+                  </ScrollView>
+                </View>
               </View>
             </View>
             <View>
@@ -109,7 +126,7 @@ const styles = StyleSheet.create({
   historyContainer: {
     backgroundColor: "#333",
     width :"100%",
-    height: 234,
+    height: 256,
     padding: 16,
     paddingTop: 8,
     marginBottom: 8
@@ -117,9 +134,21 @@ const styles = StyleSheet.create({
   historyViewContainer: {
     flexDirection: "row"
   },
+  historyEditContainer: {
+    flexDirection: "row"
+  },
+  historyLeft: {
+    flex: 1,
+    paddingTop: 8
+  },
+  historyRight: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: 'flex-end',
+  },
   history: {
     color: "#999",
-    fontSize: 18,
+    fontSize: 20,
     marginBottom: 8,
     fontWeight: '100'
   },
@@ -137,6 +166,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     margin: 0.5
+  },
+  createdAt: {
+    color: "#f92772"
   },
   date: {
     color: "#999"
