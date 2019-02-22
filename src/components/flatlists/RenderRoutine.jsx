@@ -50,19 +50,6 @@ const styles = StyleSheet.create({
 });
 
 const checkCountCompleted = (routine, previousDate) => {
-  // const result = progress.filter(item => previousDate === item.date);
-  // let value;
-  // if (result.length > 0) {
-  //   if (result.count === 0) {
-  //     console.log(result);
-  //     value = <Entypo name="check" size={20} color="#f92" />;
-  //   } else {
-  //     value = result[0].count;
-  //   }
-  // }
-
-  // return value;
-
   const { count, progress } = routine.item;
   let value = count;
   const result = progress.filter(item => previousDate === item.date);
