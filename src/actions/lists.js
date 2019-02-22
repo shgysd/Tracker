@@ -1,10 +1,12 @@
 import {
-  ADD_TASK
+  ADD_TASK,
 } from '../consistants/actionTypes';
 
-export const addTask = (name) => {
-  return {
+const addTask = name => (
+  {
     type: ADD_TASK,
-    name
-  };
-}
+    name,
+  }
+);
+
+export default addTask;

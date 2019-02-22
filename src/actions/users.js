@@ -6,61 +6,61 @@ import {
   SIGNUP,
   SUCCESS_LOGIN,
   SUCCESS_SIGNOUT,
-  SUCCESS_SIGNUP
+  SUCCESS_SIGNUP,
 } from '../consistants/actionTypes';
 
-export const changeLoginEmail = (email) => {
-  return {
+export const changeLoginEmail = email => (
+  {
     type: CHANGE_LOGIN_EMAIL,
-    email
-  };
-}
+    email,
+  }
+);
 
-export const changeLoginPassword = (password) => {
-  return {
+export const changeLoginPassword = password => (
+  {
     type: CHANGE_LOGIN_PASSWORD,
-    password
-  };
-}
+    password,
+  }
+);
 
-export const login = (email, password) => {
-  return {
+export const login = (email, password) => (
+  {
     type: LOGIN,
     email,
-    password
-  };
-}
+    password,
+  }
+);
 
-export const signOut = () => {
-  return {
-    type: SIGNOUT
-  };
-}
+export const signOut = () => (
+  {
+    type: SIGNOUT,
+  }
+);
 
-export const signUp = (email, password) => {
-  return {
+export const signUp = (email, password) => (
+  {
     type: SIGNUP,
     email,
-    password
-  };
-}
+    password,
+  }
+);
 
-export const successLogin = (uid) => {
-  return {
+export const successLogin = uid => (
+  {
     type: SUCCESS_LOGIN,
-    uid
-  };
-}
+    uid,
+  }
+);
 
-export const successSignOut = () => {
-  return {
-    type: SUCCESS_SIGNOUT
-  };
-}
+export const successSignOut = () => (
+  {
+    type: SUCCESS_SIGNOUT,
+  }
+);
 
-export const successSignUp = (uid) => {
-  return {
+export const successSignUp = uid => (
+  {
     type: SUCCESS_SIGNUP,
-    uid
-  };
-}
+    uid,
+  }
+);

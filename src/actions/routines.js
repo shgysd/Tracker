@@ -16,131 +16,131 @@ import {
   SUBMIT_ADD_ROUTINE,
   SORT_BY_NAME,
   SORT_BY_CREATED,
-  SORT_BY_COMPLETED
-} from '../consistants/actionTypes'
+  SORT_BY_COMPLETED,
+} from '../consistants/actionTypes';
 
-export const setInputModalVisible = (visible) => {
-  return {
+export const setInputModalVisible = visible => (
+  {
     type: SET_INPUT_MODAL_VISIBLE,
-    visible
-  };
-}
+    visible,
+  }
+);
 
-export const setDetailModalVisible = (visible, routine) => {
-  return {
+export const setDetailModalVisible = (visible, routine) => (
+  {
     type: SET_DETAIL_MODAL_VISIBLE,
     visible,
-    routine
-  };
-}
+    routine,
+  }
+);
 
-export const setSortModalVisible = (visible) => {
-  return {
+export const setSortModalVisible = visible => (
+  {
     type: SET_SORT_MODAL_VISIBLE,
-    visible
-  };
-}
+    visible,
+  }
+);
 
-export const setProgressModalVisible = (visible) => {
-  return {
+export const setProgressModalVisible = visible => (
+  {
     type: SET_PROGRESS_MODAL_VISIBLE,
-    visible
-  };
-}
+    visible,
+  }
+);
 
-export const addRoutine = (name, count) => {
-  return {
+export const addRoutine = (name, count) => (
+  {
     type: ADD_ROUTINE,
     name,
-    count
-  };
-}
+    count,
+  }
+);
 
-export const deleteRoutine = (key) => {
-  return {
+export const deleteRoutine = key => (
+  {
     type: DELETE_ROUTINE,
-    key
-  };
-}
+    key,
+  }
+);
 
-export const updateProgress = (key, date) => {
-  return {
+export const updateProgress = (key, date) => (
+  {
     type: UPDATE_PROGRESS,
     key,
-    date
-  };
-}
+    date,
+  }
+);
 
-export const completeProgress = (key, date) => {
-  return {
+export const completeProgress = (key, date) => (
+  {
     type: COMPLETE_PROGRESS,
     key,
-    date
-  };
-}
+    date,
+  }
+);
 
-export const successAddRoutine = (routine) => {
-  return {
+export const successAddRoutine = routine => (
+  {
     type: SUCCESS_ADD_ROUTINE,
-    routine
-  };
-}
+    routine,
+  }
+);
 
-export const successDeleteRoutine = (key) => {
-  return {
+export const successDeleteRoutine = key => (
+  {
     type: SUCCESS_DELETE_ROUTINE,
-    key
-  };
-}
+    key,
+  }
+);
 
-export const successUpdateProgress = (routines) => {
-  return {
+export const successUpdateProgress = routines => (
+  {
     type: SUCCESS_UPDATE_PROGRESS,
-    routines
-  };
-}
+    routines,
+  }
+);
 
-export const successGetRoutine = (routines) => {
-  return {
+export const successGetRoutine = routines => (
+  {
     type: SUCCESS_GET_ROUTINE,
-    routines
-  };
-}
+    routines,
+  }
+);
 
-export const changeRoutineTitle = (name) => {
-  return {
+export const changeRoutineTitle = name => (
+  {
     type: CHANGE_ROUTINE_TITLE,
-    name
-  };
-}
+    name,
+  }
+);
 
-export const changeDefaultCount = (count) => {
-  return {
+export const changeDefaultCount = count => (
+  {
     type: CHANGE_DEFAULT_COUNT,
-    count
-  };
-}
+    count,
+  }
+);
 
-export const submitAddRoutine = () => {
-  return {
-    type: SUBMIT_ADD_ROUTINE
-  };
-}
+export const submitAddRoutine = () => (
+  {
+    type: SUBMIT_ADD_ROUTINE,
+  }
+);
 
-export const sortByName = () => {
-  return {
-    type: SORT_BY_NAME
-  };
-}
+export const sortByName = () => (
+  {
+    type: SORT_BY_NAME,
+  }
+);
 
-export const sortByCreated = () => {
-  return {
-    type: SORT_BY_CREATED
-  };
-}
+export const sortByCreated = () => (
+  {
+    type: SORT_BY_CREATED,
+  }
+);
 
-export const sortByCompleted = () => {
-  return {
-    type: SORT_BY_COMPLETED
-  };
-}
+export const sortByCompleted = () => (
+  {
+    type: SORT_BY_COMPLETED,
+  }
+);
