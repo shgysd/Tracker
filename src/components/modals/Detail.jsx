@@ -120,7 +120,6 @@ class Detail extends React.Component {
         value = styles.done;
       }
     }
-
     return value;
   }
 
@@ -132,7 +131,6 @@ class Detail extends React.Component {
     if (this.getFormatedDate(date) === this.getPreviousDate(count)) {
       return styles.createdAt;
     }
-
     return styles.date;
   }
 
@@ -248,7 +246,7 @@ Detail.defaultProps = {
 Detail.propTypes = {
   handleShowDetail: PropTypes.func,
   visible: PropTypes.bool,
-  setProgressModalVisible: PropTypes.bool,
+  setProgressModalVisible: PropTypes.func,
   deleteRoutine: PropTypes.func,
   selectedRoutine: PropTypes.shape({
     item: PropTypes.shape({
@@ -259,7 +257,6 @@ Detail.propTypes = {
       createdAt: PropTypes.string,
     }),
   }),
-
 };
 
 export default Detail;
