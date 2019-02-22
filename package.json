@@ -29,6 +29,7 @@
     "@types/react-dom": "^16.8.2",
     "@types/react-native": "^0.57.36",
     "@types/react-redux": "^7.0.1",
+    "babel-eslint": "^10.0.1",
     "babel-preset-expo": "^5.0.0",
     "eslint": "^5.14.1",
     "eslint-config-airbnb": "^17.1.0",
