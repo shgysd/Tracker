@@ -153,7 +153,7 @@ class Progress extends React.Component {
         if (i === 0) {
           for (let n = 0; n < moment().day() + 1; n += 1) {
             days.unshift((
-              <TouchableWithoutFeedback onPress={this.onPress.bind(this, count)}>
+              <TouchableWithoutFeedback onPress={this.onPress.bind(this, count)} key={count}>
                 <View key={n} style={this.checkComplete(selectedRoutine, moment().subtract(count, 'days').format('MM-DD-YYYY'))}>
                   <Text style={moment(selectedRoutine.createdAt).format('MM-DD-YYYY') === moment().subtract(count, 'days').format('MM-DD-YYYY') ? styles.createdAt : styles.date}>
                     {moment().subtract(count, 'days').date()}
@@ -167,7 +167,7 @@ class Progress extends React.Component {
         } else {
           for (let n = 0; n < 7; n += 1) {
             days.unshift((
-              <TouchableWithoutFeedback onPress={this.onPress.bind(this, count)}>
+              <TouchableWithoutFeedback onPress={this.onPress.bind(this, count)} key={count}>
                 <View key={n} style={this.checkComplete(selectedRoutine, moment().subtract(count, 'days').format('MM-DD-YYYY'))}>
                   <Text style={moment(selectedRoutine.createdAt).format('MM-DD-YYYY') === moment().subtract(count, 'days').format('MM-DD-YYYY') ? styles.createdAt : styles.date}>
                     { moment().subtract(count, 'days').date() }
