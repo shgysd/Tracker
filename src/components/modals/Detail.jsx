@@ -1,67 +1,199 @@
 import React from 'react';
-import { StyleSheet, Text, View, Modal, ScrollView,Button } from 'react-native';
+import PropTypes from 'prop-types';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  ScrollView,
+  Button,
+} from 'react-native';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import moment from 'moment';
 
-class Detail extends React.Component {
+const styles = StyleSheet.create({
+  headerContainer: {
+    backgroundColor: '#000',
+    height: 48,
+    width: '100%',
+    flexDirection: 'row',
+  },
+  homeContainer: {
+    flex: 1,
+  },
+  mainContainer: {
+    backgroundColor: '#222',
+    flex: 1,
+  },
+  listContainer: {
+    flexDirection: 'row',
+  },
+  title: {
+    color: '#fafafa',
+    fontSize: 20,
+    padding: 12,
+  },
+  historyContainer: {
+    backgroundColor: '#333',
+    width: '100%',
+    height: 256,
+    padding: 16,
+    paddingTop: 8,
+    marginBottom: 8,
+  },
+  historyViewContainer: {
+    flexDirection: 'row',
+  },
+  historyEditContainer: {
+    flexDirection: 'row',
+  },
+  historyLeft: {
+    flex: 1,
+    paddingTop: 8,
+  },
+  historyRight: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  history: {
+    color: '#999',
+    fontSize: 20,
+    marginBottom: 8,
+    fontWeight: '100',
+  },
+  dateContainer: {
+    backgroundColor: '#444',
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 0.5,
+  },
+  dayContainer: {
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 0.5,
+  },
+  createdAt: {
+    color: '#f92772',
+  },
+  date: {
+    color: '#999',
+  },
+  day: {
+    color: '#999',
+    fontSize: 9,
+  },
+  done: {
+    backgroundColor: '#f92',
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 0.5,
+  },
+  streakContainer: {
+    backgroundColor: '#333',
+    width: '100%',
+    height: 80,
+    padding: 16,
+    paddingTop: 8,
+    marginBottom: 8,
+  },
+  icon: {
+    margin: 14,
+  },
+  delete: {
+    color: '#f44336',
+  },
+});
 
+class Detail extends React.Component {
   checkComplete = (routine, date) => {
-    let style = styles.dateContainer
-    routine.progress.map((item) => {
-      if(item.date === date && 0 >= item.count ) {
-        style = styles.done;
+    const result = routine.progress.filter(item => item.date === date && item.count >= 0);
+    let value = styles.dateContainer;
+    if (result.length > 0) {
+      if (result[0].count === 0) {
+        value = styles.done;
       }
-    });
-    return style;
+    }
+
+    return value;
+  }
+
+  getPreviousDate = count => moment().subtract(count, 'days').format('MM-DD-YYYY');
+
+  getFormatedDate = date => moment(date).format('MM-DD-YYYY');
+
+  getCreatedDateStyle = (date, count) => {
+    if (this.getFormatedDate(date) === this.getPreviousDate(count)) {
+      return styles.createdAt;
+    }
+
+    return styles.date;
   }
 
   render() {
-    const title = this.props.selectedRoutine ? this.props.selectedRoutine.name : "";
+    const {
+      selectedRoutine,
+      visible,
+      setProgressModalVisible,
+      deleteRoutine,
+      handleShowDetail,
+    } = this.props;
+    const title = selectedRoutine ? selectedRoutine.name : '';
     const weeks = [];
-    const selectedRoutine = this.props.selectedRoutine ? this.props.selectedRoutine : null;
     let days = [];
     let count = 0;
 
-    if(selectedRoutine) {
-      // 27 weeks
-      for(let i = 0; i < 27; i++) {
-        if(i === 0) {
-          for(let n = 0; n < moment().day() + 1; n++) {
+    if (selectedRoutine) {
+      for (let i = 0; i < 27; i += 1) { // 27 weeks
+        if (i === 0) {
+          for (let n = 0; n < moment().day() + 1; n += 1) {
             days.unshift((
-              <View key={n} style={this.checkComplete(selectedRoutine, moment().subtract(count, 'days').format('MM-DD-YYYY'))}>
-                <Text style={ moment(selectedRoutine.createdAt).format('MM-DD-YYYY') === moment().subtract(count, 'days').format('MM-DD-YYYY') ? styles.createdAt : styles.date }>
+              <View
+                key={n}
+                style={this.checkComplete(selectedRoutine, this.getPreviousDate(count))}
+              >
+                <Text style={this.getCreatedDateStyle(selectedRoutine.createdAt, count)}>
                   {moment().subtract(count, 'days').date()}
                 </Text>
               </View>
-            ))
-            count++;
+            ));
+            count += 1;
           }
         } else {
-          for(let n = 0; n < 7; n++) {
+          for (let n = 0; n < 7; n += 1) {
             days.unshift((
-              <View key={n} style={this.checkComplete(selectedRoutine, moment().subtract(count, 'days').format('MM-DD-YYYY'))}>
-                <Text style={ moment(selectedRoutine.createdAt).format('MM-DD-YYYY') === moment().subtract(count, 'days').format('MM-DD-YYYY') ? styles.createdAt : styles.date }>
+              <View
+                key={n}
+                style={this.checkComplete(selectedRoutine, this.getPreviousDate(count))}
+              >
+                <Text style={this.getCreatedDateStyle(selectedRoutine.createdAt, count)}>
                   {moment().subtract(count, 'days').date()}
                 </Text>
               </View>
-            ))
-            count++;
+            ));
+            count += 1;
           }
         }
         weeks.push((
           <View key={i}>
             {days}
-          </View>)
-        )
+          </View>
+        ));
         days = [];
       }
     }
 
     return (
-      <Modal visible={this.props.visible} onRequestClose={() => this.props.handleShowDetail(!this.props.visible)} animationType="slide">
+      <Modal visible={visible} onRequestClose={() => handleShowDetail(!visible)} animationType="slide">
         <View style={styles.homeContainer}>
           <View style={styles.headerContainer}>
-            <Ionicons name="md-arrow-round-back" size={20} color="white" style={styles.icon} onPress={() => this.props.handleShowDetail(!this.props.visible)} />
+            <Ionicons name="md-arrow-round-back" size={20} color="white" style={styles.icon} onPress={() => handleShowDetail(!visible)} />
             <Text style={styles.title}>{title}</Text>
           </View>
           <View style={styles.mainContainer}>
@@ -72,7 +204,7 @@ class Detail extends React.Component {
                     <Text style={styles.history}>History</Text>
                   </View>
                   <View style={styles.historyRight}>
-                    <Feather name="edit" size={20} color="#ccc" style={styles.icon} onPress={this.props.setProgressModalVisible} />
+                    <Feather name="edit" size={20} color="#ccc" style={styles.icon} onPress={setProgressModalVisible} />
                   </View>
                 </View>
                 <View style={styles.historyViewContainer}>
@@ -85,14 +217,18 @@ class Detail extends React.Component {
                     <View style={styles.dayContainer}><Text style={styles.day}>Fri</Text></View>
                     <View style={styles.dayContainer}><Text style={styles.day}>Sat</Text></View>
                   </View>
-                  <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.listContainer}>
+                  <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    style={styles.listContainer}
+                  >
                     {weeks}
                   </ScrollView>
                 </View>
               </View>
             </View>
             <View>
-              <Button color="#111" title="DELETE" onPress={ () => this.props.deleteRoutine(this.props.selectedRoutine.key) } />
+              <Button color="#111" title="DELETE" onPress={() => deleteRoutine(selectedRoutine.key)} />
             </View>
           </View>
         </View>
@@ -101,104 +237,29 @@ class Detail extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  headerContainer: {
-    backgroundColor: "#000",
-    height: 48,
-    width: "100%",
-    flexDirection: "row"
-  },
-  homeContainer: {
-    flex: 1
-  },
-  mainContainer: {
-    backgroundColor: "#222",
-    flex: 1
-  },
-  listContainer: {
-    flexDirection: 'row'
-  },
-  title: {
-    color: "#fafafa",
-    fontSize: 20,
-    padding: 12
-  },
-  historyContainer: {
-    backgroundColor: "#333",
-    width :"100%",
-    height: 256,
-    padding: 16,
-    paddingTop: 8,
-    marginBottom: 8
-  },
-  historyViewContainer: {
-    flexDirection: "row"
-  },
-  historyEditContainer: {
-    flexDirection: "row"
-  },
-  historyLeft: {
-    flex: 1,
-    paddingTop: 8
-  },
-  historyRight: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: 'flex-end',
-  },
-  history: {
-    color: "#999",
-    fontSize: 20,
-    marginBottom: 8,
-    fontWeight: '100'
-  },
-  dateContainer: {
-    backgroundColor: "#444",
-    width: 24,
-    height: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 0.5
-  },
-  dayContainer: {
-    width: 24,
-    height: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 0.5
-  },
-  createdAt: {
-    color: "#f92772"
-  },
-  date: {
-    color: "#999"
-  },
-  day: {
-    color: "#999",
-    fontSize: 9
-  },
-  done: {
-    backgroundColor: "#f92",
-    width: 24,
-    height: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 0.5
-  },
-  streakContainer: {
-    backgroundColor: "#333",
-    width :"100%",
-    height: 80,
-    padding: 16,
-    paddingTop: 8,
-    marginBottom: 8
-  },
-  icon: {
-    margin: 14
-  },
-  delete: {
-    color: "#f44336"
-  }
-});
+Detail.defaultProps = {
+  handleShowDetail: null,
+  visible: false,
+  selectedRoutine: null,
+  setProgressModalVisible: false,
+  deleteRoutine: null,
+};
+
+Detail.propTypes = {
+  handleShowDetail: PropTypes.func,
+  visible: PropTypes.bool,
+  setProgressModalVisible: PropTypes.bool,
+  deleteRoutine: PropTypes.func,
+  selectedRoutine: PropTypes.shape({
+    item: PropTypes.shape({
+      name: PropTypes.string,
+      count: PropTypes.number,
+      progress: PropTypes.array,
+      key: PropTypes.string,
+      createdAt: PropTypes.string,
+    }),
+  }),
+
+};
 
 export default Detail;
