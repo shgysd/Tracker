@@ -10,13 +10,13 @@ import rootSaga from '../sagas';
 
 const persistConfig = {
   key: 'root',
-  storage
-}
+  storage,
+};
 
 const rootReducer = combineReducers({
   routines: routinesReducer,
   lists: listsReducer,
-  users: usersReducer
+  users: usersReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -26,12 +26,11 @@ const configureStore = () => {
   const store = createStore(
     persistedReducer,
     applyMiddleware(
-      sagaMiddleware
-    )
+      sagaMiddleware,
+    ),
   );
   sagaMiddleware.run(rootSaga);
   const persistor = persistStore(store);
-  //persistor.purge();
   return { store, persistor };
 };
 
