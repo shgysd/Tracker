@@ -1,72 +1,56 @@
 import { call, put, take } from 'redux-saga/effects';
 import * as firebase from 'firebase';
 
-import { successLogin, successSignOut, successSignUp } from '../actions/users';
+import {
+  successLogin,
+  successSignOut,
+  successSignUp,
+  failureLogin,
+  failureSignOut,
+  failureSignUp,
+} from '../actions/users';
+
+const login = async (email, password) => {
+  try {
+    const uid = await firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(user => user.user.uid)
+      .catch((error) => { throw new Error(error); });
+    return { uid };
+  } catch (error) {
+    return { error };
+  }
+};
 
 export function* handleLogin() {
   while (true) {
-    const action = yield take("LOGIN");
+    const action = yield take('LOGIN');
     const { uid, error } = yield call(login, action.email, action.password);
     if (uid && !error) {
       yield put(successLogin(uid));
     } else {
-      console.log(error);
-    }
-  }
-}
-
-const login = async (email, password) => {
-  try {
-    const uid = await firebase.auth().signInWithEmailAndPassword(email, password).then((user) => {
-      return user.user.uid;
-    }).catch((error) => {
-      throw new Error(error);
-    });
-    return { uid };
-  } catch (error) {
-    console.log(error);
-    return { error };
-  }
-}
-
-export function* handleSignOut() {
-  while (true) {
-    const action = yield take("SIGNOUT");
-    const {payload, error} = yield call(signOut);
-    if (payload && !error) {
-      yield put(successSignOut(payload));
-    } else {
-      console.log(error);
+      yield put(failureLogin(error));
     }
   }
 }
 
 const signOut = async () => {
   try {
-    await firebase.auth().signOut().catch(error => {
-      console.log(error);
-      throw new Error(error);
-    });
-    await AsyncStorage.removeItem('uid').catch(error => {
-      console.log(error);
-      throw new Error(error);
-    });
-    await AsyncStorage.removeItem('routines');
-    return { payload: "ok"};
+    await firebase.auth().signOut()
+      .catch((error) => { throw new Error(error); });
+    return { result: 'ok' };
   } catch (error) {
-    console.log(error);
     return { error };
   }
-}
+};
 
-export function* handleSignUp() {
+export function* handleSignOut() {
   while (true) {
-    const action = yield take("SIGNUP");
-    const { uid, error } = yield call(signUp, action.email, action.password);
-    if (uid && !error) {
-      yield put(successSignUp(uid));
+    yield take('SIGNOUT');
+    const { result, error } = yield call(signOut);
+    if (result && !error) {
+      yield put(successSignOut(result));
     } else {
-      console.log(error);
+      yield put(failureSignOut(error));
     }
   }
 }
@@ -79,7 +63,18 @@ const signUp = async (email, password) => {
       });
     return { uid: result.user.uid };
   } catch (error) {
-    console.log(error);
     return { error };
+  }
+};
+
+export function* handleSignUp() {
+  while (true) {
+    const action = yield take('SIGNUP');
+    const { uid, error } = yield call(signUp, action.email, action.password);
+    if (uid && !error) {
+      yield put(successSignUp(uid));
+    } else {
+      yield put(failureSignUp(error));
+    }
   }
 }

@@ -17,6 +17,7 @@ const initialState = {
   password: '',
   uid: null,
   isLoading: false,
+  errorMessage: '',
 };
 
 const reducer = (state = initialState, action) => {
@@ -78,14 +79,17 @@ const reducer = (state = initialState, action) => {
     case FAILURE_LOGIN:
       return {
         ...state,
+        errorMessage: action.error.message,
       };
     case FAILURE_SIGNOUT:
       return {
         ...state,
+        errorMessage: action.error.message,
       };
     case FAILURE_SIGNUP:
       return {
         ...state,
+        errorMessage: action.error.message,
       };
     default:
       return state;

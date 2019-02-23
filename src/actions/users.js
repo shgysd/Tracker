@@ -68,20 +68,23 @@ export const successSignUp = uid => (
   }
 );
 
-export const failureLogin = () => (
+export const failureLogin = error => (
   {
     type: FAILURE_LOGIN,
+    error,
   }
 );
 
-export const failureSignOut = () => (
+export const failureSignOut = error => (
   {
     type: FAILURE_SIGNOUT,
+    error,
   }
 );
 
-export const failureSignUp = () => (
+export const failureSignUp = error => (
   {
     type: FAILURE_SIGNUP,
+    error,
   }
 );
