@@ -7,6 +7,9 @@ import {
   SUCCESS_LOGIN,
   SUCCESS_SIGNOUT,
   SUCCESS_SIGNUP,
+  FAILURE_LOGIN,
+  FAILURE_SIGNOUT,
+  FAILURE_SIGNUP,
 } from '../consistants/actionTypes';
 
 const initialState = {
@@ -71,6 +74,18 @@ const reducer = (state = initialState, action) => {
         isLoading: false,
         email: '',
         password: '',
+      };
+    case FAILURE_LOGIN:
+      return {
+        ...state,
+      };
+    case FAILURE_SIGNOUT:
+      return {
+        ...state,
+      };
+    case FAILURE_SIGNUP:
+      return {
+        ...state,
       };
     default:
       return state;

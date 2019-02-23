@@ -7,6 +7,9 @@ import {
   SUCCESS_LOGIN,
   SUCCESS_SIGNOUT,
   SUCCESS_SIGNUP,
+  FAILURE_LOGIN,
+  FAILURE_SIGNOUT,
+  FAILURE_SIGNUP,
 } from '../consistants/actionTypes';
 
 export const changeLoginEmail = email => (
@@ -62,5 +65,23 @@ export const successSignUp = uid => (
   {
     type: SUCCESS_SIGNUP,
     uid,
+  }
+);
+
+export const failureLogin = () => (
+  {
+    type: FAILURE_LOGIN,
+  }
+);
+
+export const failureSignOut = () => (
+  {
+    type: FAILURE_SIGNOUT,
+  }
+);
+
+export const failureSignUp = () => (
+  {
+    type: FAILURE_SIGNUP,
   }
 );

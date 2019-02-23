@@ -32,4 +32,8 @@ export const SUCCESS_LOGIN = 'SUCCESS_LOGIN';
 export const SUCCESS_SIGNOUT = 'SUCCESS_SIGNOUT';
 export const SUCCESS_SIGNUP = 'SUCCESS_SIGNUP';
 
+export const FAILURE_LOGIN = 'FAILURE_LOGIN';
+export const FAILURE_SIGNOUT = 'FAILURE_SIGNOUT';
+export const FAILURE_SIGNUP = 'FAILURE_SIGNUP';
+
 export const ADD_TASK = 'ADD_TASK';
