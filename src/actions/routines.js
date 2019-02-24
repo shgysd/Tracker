@@ -10,7 +10,9 @@ import {
   SUCCESS_ADD_ROUTINE,
   SUCCESS_DELETE_ROUTINE,
   SUCCESS_UPDATE_PROGRESS,
-  SUCCESS_GET_ROUTINE,
+  FAILURE_ADD_ROUTINE,
+  FAILURE_DELETE_ROUTINE,
+  FAILURE_UPDATE_PROGRESS,
   CHANGE_ROUTINE_TITLE,
   CHANGE_DEFAULT_COUNT,
   SUBMIT_ADD_ROUTINE,
@@ -48,34 +50,41 @@ export const setProgressModalVisible = visible => (
   }
 );
 
-export const addRoutine = (name, count) => (
+export const addRoutine = (name, count, key, uid) => (
   {
     type: ADD_ROUTINE,
     name,
     count,
+    key,
+    uid,
   }
 );
 
-export const deleteRoutine = key => (
+export const deleteRoutine = (key, uid) => (
   {
     type: DELETE_ROUTINE,
     key,
+    uid,
   }
 );
 
-export const updateProgress = (key, date) => (
+export const updateProgress = (key, date, routines, uid) => (
   {
     type: UPDATE_PROGRESS,
     key,
     date,
+    routines,
+    uid,
   }
 );
 
-export const completeProgress = (key, date) => (
+export const completeProgress = (key, date, routines, uid) => (
   {
     type: COMPLETE_PROGRESS,
     key,
     date,
+    routines,
+    uid,
   }
 );
 
@@ -100,10 +109,24 @@ export const successUpdateProgress = routines => (
   }
 );
 
-export const successGetRoutine = routines => (
+export const failureAddRoutine = error => (
   {
-    type: SUCCESS_GET_ROUTINE,
-    routines,
+    type: FAILURE_ADD_ROUTINE,
+    error,
+  }
+);
+
+export const failureDeleteRoutine = error => (
+  {
+    type: FAILURE_DELETE_ROUTINE,
+    error,
+  }
+);
+
+export const failureUpdateProgress = error => (
+  {
+    type: FAILURE_UPDATE_PROGRESS,
+    error,
   }
 );
 

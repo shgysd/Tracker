@@ -81,30 +81,41 @@ class Routine extends React.Component {
     _setDetailModalVisible(visible, routine);
   };
 
+  generateKey = (length) => {
+    const keyLength = length;
+    const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const cl = characters.length;
+    let key = '';
+    for (let i = 0; i < keyLength; i += 1) {
+      key += characters[Math.floor(Math.random() * cl)];
+    }
+    return key;
+  };
+
   addRoutine = (name, count) => {
-    const { addRoutine: _addROutine } = this.props;
+    const { addRoutine: _addROutine, uid } = this.props;
     if (name.length > 0) {
-      _addROutine(name, count);
+      _addROutine(name, count, this.generateKey(16), uid);
     } else {
       Vibration.vibrate(8);
     }
   };
 
   deleteRoutine = (key) => {
-    const { deleteRoutine: _deleteRoutine } = this.props;
-    _deleteRoutine(key);
+    const { deleteRoutine: _deleteRoutine, uid } = this.props;
+    _deleteRoutine(key, uid);
   };
 
   setProgress = (key, date) => {
-    const { updateProgress: _updateProgress } = this.props;
+    const { updateProgress: _updateProgress, routines, uid } = this.props;
     Vibration.vibrate(4);
-    _updateProgress(key, date);
+    _updateProgress(key, date, routines, uid);
   };
 
   completeProgress = (key, date) => {
-    const { completeProgress: _completeProgress } = this.props;
+    const { completeProgress: _completeProgress, routines, uid } = this.props;
     Vibration.vibrate(4);
-    _completeProgress(key, date);
+    _completeProgress(key, date, routines, uid);
   };
 
   render() {
@@ -182,6 +193,7 @@ class Routine extends React.Component {
 }
 
 Routine.defaultProps = {
+  uid: null,
   addRoutine: null,
   deleteRoutine: null,
   updateProgress: null,
@@ -202,6 +214,7 @@ Routine.defaultProps = {
 };
 
 Routine.propTypes = {
+  uid: PropTypes.string,
   addRoutine: PropTypes.func,
   deleteRoutine: PropTypes.func,
   updateProgress: PropTypes.func,
@@ -244,10 +257,15 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  addRoutine: (name, count) => dispatch(addRoutine(name, count)),
-  deleteRoutine: routine => dispatch(deleteRoutine(routine)),
-  updateProgress: (key, date, routine) => dispatch(updateProgress(key, date, routine)),
-  completeProgress: (key, date, routine) => dispatch(completeProgress(key, date, routine)),
+  addRoutine: (name, count, key, uid) => dispatch(addRoutine(name, count, key, uid)),
+  deleteRoutine: (key, uid) => dispatch(deleteRoutine(key, uid)),
+  updateProgress: (key, date, routine, uid) => dispatch(updateProgress(key, date, routine, uid)),
+  completeProgress: (
+    key,
+    date,
+    routine,
+    uid,
+  ) => dispatch(completeProgress(key, date, routine, uid)),
   setInputModalVisible: visible => dispatch(setInputModalVisible(visible)),
   setDetailModalVisible: (visible, routine) => dispatch(setDetailModalVisible(visible, routine)),
   setSortModalVisible: visible => dispatch(setSortModalVisible(visible)),

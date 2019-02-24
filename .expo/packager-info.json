@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
   "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 1884,
+  "packagerPort": null,
+  "packagerPid": null,
   "expoServerNgrokUrl": "https://4j-5hz.anonymous.tracker.exp.direct",
   "packagerNgrokUrl": "https://packager.4j-5hz.anonymous.tracker.exp.direct",
-  "ngrokPid": 1896
+  "ngrokPid": 3910
 }

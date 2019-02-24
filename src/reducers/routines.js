@@ -10,7 +10,6 @@ import {
   COMPLETE_PROGRESS,
   SUCCESS_ADD_ROUTINE,
   SUCCESS_DELETE_ROUTINE,
-  SUCCESS_GET_ROUTINE,
   SUCCESS_UPDATE_PROGRESS,
   CHANGE_ROUTINE_TITLE,
   CHANGE_DEFAULT_COUNT,
@@ -29,17 +28,6 @@ const initialState = {
   selectedRoutine: null,
   name: '',
   count: 1,
-};
-
-const generateKey = (length) => {
-  const keyLength = length;
-  const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  const cl = characters.length;
-  let key = '';
-  for (let i = 0; i < keyLength; i += 1) {
-    key += characters[Math.floor(Math.random() * cl)];
-  }
-  return key;
 };
 
 const reducer = (state = initialState, action) => {
@@ -66,12 +54,11 @@ const reducer = (state = initialState, action) => {
         progressModalVisible: action.visible,
       };
     case ADD_ROUTINE: {
-      const key = generateKey(16);
       const routine = {
         name: action.name,
         count: action.count,
         progress: [],
-        key,
+        key: action.key,
         createdAt: moment().format(),
       };
       return {
@@ -139,7 +126,6 @@ const reducer = (state = initialState, action) => {
     case SUCCESS_ADD_ROUTINE:
       return {
         ...state,
-        routines: state.routines.concat(action.routine),
       };
     case SUCCESS_DELETE_ROUTINE:
       return {
@@ -148,15 +134,7 @@ const reducer = (state = initialState, action) => {
         detailModalVisible: false,
       };
     case SUCCESS_UPDATE_PROGRESS:
-      return {
-        ...state,
-        routines: action.routines,
-      };
-    case SUCCESS_GET_ROUTINE:
-      return {
-        ...state,
-        routines: action.routines,
-      };
+      return state;
     case CHANGE_ROUTINE_TITLE:
       return {
         ...state,
