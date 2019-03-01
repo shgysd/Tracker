@@ -60,8 +60,7 @@ typings/
 # next.js build output
 .next
 
-src/configs/
 .DS_Store
-google-services.json
 
-.expo
+src/config/firebase.js
+.expo/packager-info.json
