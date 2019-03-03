@@ -70,5 +70,5 @@ package-lock.json
 /ReactCommon/**/*.xcodeproj
 RNTester/build
 
-# Configs
-src/config/firebase.js
+src/configs/firebase.js
+.expo/packager-info.json
