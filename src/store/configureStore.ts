@@ -9,8 +9,8 @@ import usersReducer from '../reducers/users';
 import rootSaga from '../sagas';
 
 const persistConfig = {
-  key: 'root',
   storage,
+  key: 'root',
 };
 
 const rootReducer = combineReducers({
