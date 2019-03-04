@@ -5,8 +5,10 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "eject": "expo eject",
-    "test": "jest",
-    "test:watch": "yarn test -- --watch"
+    "test": "npm run tslint && npm run tsc-test && npm run jest",
+    "tslint": "tslint --project .",
+    "tsc-test": "tsc --project . --noEmit",
+    "jest": "jest"
   },
   "dependencies": {
     "@expo/vector-icons": "^9.0.0",
@@ -24,11 +26,17 @@
   },
   "devDependencies": {
     "@types/expo__vector-icons": "^9.0.1",
+    "@types/jest": "^24.0.9",
     "@types/react": "^16.8.3",
     "@types/react-dom": "^16.8.2",
     "@types/react-native": "^0.57.36",
     "@types/react-redux": "^7.0.1",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.10.0",
     "jest": "^24.1.0",
+    "jest-enzyme": "^7.0.1",
+    "jest-expo": "^32.0.0",
+    "ts-jest": "^24.0.0",
     "tslint": "^5.12.1",
     "tslint-config-airbnb": "^5.11.1",
     "typescript": "^3.3.3"
