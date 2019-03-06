@@ -20,5 +20,5 @@ module.exports = {
       }
     }
   },
-  "setupFilesAfterEnv": ['<rootDir>/__tests__/setup-tests.js'],
+  "setupFilesAfterEnv": ['<rootDir>/__tests__/setupTests.js'],
 };
