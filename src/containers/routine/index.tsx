@@ -9,8 +9,8 @@ import {
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import Header from '../../components/header';
-import Date from '../../components/date';
+import Header from '../../components/Header';
+import DateBar from '../../components/DateBar';
 import AddRoutine from './AddRoutine';
 import Sort from '../../components/modals/Sort';
 import Progress from '../../components/modals/Progress';
@@ -142,7 +142,7 @@ class Routine extends React.Component {
           sortModalVisible={_sortModalVisible}
           setSortModalVisible={_setSortModalVisible}
         />
-        <Date />
+        <DateBar />
         <View style={styles.mainContainer}>
           <FlatList
             style={styles.listContainer}

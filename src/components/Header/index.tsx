@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import {
   AntDesign,
   Feather,
@@ -59,37 +58,40 @@ const styles = StyleSheet.create({
   },
 });
 
-const Header = props => (
+const Header = (props: any) => ( // ToDo
   <View style={styles.headerContainer}>
     <View style={styles.headerLeftContainer}>
       <Text style={styles.title}>Routines</Text>
     </View>
     <View style={styles.headerRightContainer}>
       <TouchableOpacity>
-        <AntDesign style={styles.icon} name="plussquareo" size={22} color="#ccc" onPress={() => props.setInputModalVisible(!props.inputModalVisible)} />
+        <AntDesign
+          style={styles.icon}
+          name="plussquareo"
+          size={22}
+          color="#ccc"
+          onPress={() => props.setInputModalVisible(!props.inputModalVisible)}
+        />
       </TouchableOpacity>
       <TouchableOpacity>
-        <Feather style={styles.icon} name="filter" size={22} color="#ccc" onPress={() => props.setSortModalVisible(!props.sortModalVisible)} />
+        <Feather
+          style={styles.icon}
+          name="filter"
+          size={22}
+          color="#ccc"
+          onPress={() => props.setSortModalVisible(!props.sortModalVisible)}
+        />
       </TouchableOpacity>
       <TouchableOpacity>
-        <Feather style={styles.icon} name="settings" size={22} color="#ccc" />
+        <Feather
+          style={styles.icon}
+          name="settings"
+          size={22}
+          color="#ccc"
+        />
       </TouchableOpacity>
     </View>
   </View>
 );
-
-Header.defaultProps = {
-  setInputModalVisible: null,
-  inputModalVisible: false,
-  setSortModalVisible: null,
-  sortModalVisible: null,
-};
-
-Header.propTypes = {
-  setInputModalVisible: PropTypes.func,
-  setSortModalVisible: PropTypes.func,
-  inputModalVisible: PropTypes.bool,
-  sortModalVisible: PropTypes.bool,
-};
 
 export default Header;
