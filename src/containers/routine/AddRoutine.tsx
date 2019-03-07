@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,7 +9,6 @@ import {
   Button,
   Picker,
 } from 'react-native';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { changeRoutineTitle, changeDefaultCount, submitAddRoutine } from '../../actions/routines';
@@ -124,28 +123,6 @@ class AddRoutine extends React.Component {
     );
   }
 }
-
-AddRoutine.defaultProps = {
-  name: null,
-  count: null,
-  visible: null,
-  createRoutine: null,
-  submitAddRoutine: null,
-  handleVisible: null,
-  changeRoutineTitle: null,
-  changeDefaultCount: null,
-};
-
-AddRoutine.propTypes = {
-  name: PropTypes.string,
-  count: PropTypes.number,
-  visible: PropTypes.bool,
-  createRoutine: PropTypes.func,
-  submitAddRoutine: PropTypes.func,
-  handleVisible: PropTypes.func,
-  changeRoutineTitle: PropTypes.func,
-  changeDefaultCount: PropTypes.func,
-};
 
 const mapStateToProps = state => ({
   name: state.routines.name,

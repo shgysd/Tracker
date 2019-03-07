@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import {
   StyleSheet,
   Text,
@@ -111,6 +110,12 @@ const styles = StyleSheet.create({
   },
 });
 
+// interface PropTypes {
+// }
+// TODO
+// interface StateTypes {
+// }
+
 class Progress extends React.Component {
   constructor(props) {
     super(props);
@@ -213,29 +218,5 @@ class Progress extends React.Component {
     );
   }
 }
-
-Progress.defaultProps = {
-  handleShowDetail: null,
-  visible: false,
-  selectedRoutine: null,
-  setProgressModalVisible: false,
-  completeProgress: null,
-};
-
-Progress.propTypes = {
-  handleShowDetail: PropTypes.func,
-  visible: PropTypes.bool,
-  setProgressModalVisible: PropTypes.func,
-  completeProgress: PropTypes.func,
-  selectedRoutine: PropTypes.shape({
-    item: PropTypes.shape({
-      name: PropTypes.string,
-      count: PropTypes.number,
-      progress: PropTypes.array,
-      key: PropTypes.string,
-      createdAt: PropTypes.string,
-    }),
-  }),
-};
 
 export default Progress;

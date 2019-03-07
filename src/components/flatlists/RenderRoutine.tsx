@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import {
   View,
   Text,
@@ -49,10 +48,19 @@ const styles = StyleSheet.create({
   },
 });
 
-const checkCountCompleted = (routine, previousDate) => {
+interface PropTypes {
+
+}
+
+interface ProgressTypes {
+  count: number;
+  date: string;
+}
+
+const checkCountCompleted = (routine, previousDate: string) => {
   const { count, progress } = routine.item;
   let value = count;
-  const result = progress.filter(item => previousDate === item.date);
+  const result = progress.filter((item: ProgressTypes) => previousDate === item.date);
   if (result.length > 0) {
     if (result[0].count === 0) {
       value = 0;
@@ -65,6 +73,7 @@ const checkCountCompleted = (routine, previousDate) => {
 };
 
 const progressScreen = (props) => {
+  console.log(props);
   const progress = [];
   const { routine } = props;
 
@@ -114,27 +123,6 @@ const RenderRoutine = (props) => {
       </View>
     </View>
   );
-};
-
-RenderRoutine.defaultProps = {
-  handleShowDetail: null,
-  visible: false,
-  routine: null,
-};
-
-RenderRoutine.propTypes = {
-  handleShowDetail: PropTypes.func,
-  visible: PropTypes.bool,
-  routine: PropTypes.shape({
-    item: PropTypes.shape({
-      name: PropTypes.string,
-      count: PropTypes.number,
-      progress: PropTypes.array,
-      key: PropTypes.string,
-      createdAt: PropTypes.string,
-    }),
-  }),
-
 };
 
 export default RenderRoutine;

@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import {
   StyleSheet,
   Text,
@@ -111,8 +110,31 @@ const styles = StyleSheet.create({
   },
 });
 
-class Detail extends React.Component {
-  checkComplete = (routine, date) => {
+interface ProgressTypes {
+  count: number;
+  date: string;
+}
+
+interface RoutineTypes {
+  name: string;
+  count: number;
+  progress: Array<ProgressTypes>;
+  key: string;
+  createdAt: string;
+}
+
+interface PropTypes {
+  visible: boolean;
+  selectedRoutine: RoutineTypes;
+  setProgressModalVisible: (visible: boolean, routine: RoutineTypes) => void;
+  deleteRoutine: (
+    key: string,
+  ) => void;
+  handleShowDetail: (visible: boolean, routine: RoutineTypes) => void;
+}
+
+class Detail extends React.Component<PropTypes> {
+  checkComplete = (routine: RoutineTypes, date: string) => {
     const result = routine.progress.filter(item => item.date === date && item.count >= 0);
     let value = styles.dateContainer;
     if (result.length > 0) {
@@ -123,11 +145,11 @@ class Detail extends React.Component {
     return value;
   }
 
-  getPreviousDate = count => moment().subtract(count, 'days').format('MM-DD-YYYY');
+  getPreviousDate = (count: number) => moment().subtract(count, 'days').format('MM-DD-YYYY');
 
-  getFormatedDate = date => moment(date).format('MM-DD-YYYY');
+  getFormatedDate = (date: string) => moment(date).format('MM-DD-YYYY');
 
-  getCreatedDateStyle = (date, count) => {
+  getCreatedDateStyle = (date: string, count: number) => {
     if (this.getFormatedDate(date) === this.getPreviousDate(count)) {
       return styles.createdAt;
     }
@@ -188,10 +210,18 @@ class Detail extends React.Component {
     }
 
     return (
-      <Modal visible={visible} onRequestClose={() => handleShowDetail(!visible)} animationType="slide">
+      <Modal
+        visible={visible}
+        onRequestClose={() => handleShowDetail(!visible, selectedRoutine)} animationType="slide">
         <View style={styles.homeContainer}>
           <View style={styles.headerContainer}>
-            <Ionicons name="md-arrow-round-back" size={20} color="white" style={styles.icon} onPress={() => handleShowDetail(!visible)} />
+            <Ionicons
+              name="md-arrow-round-back"
+              size={20}
+              color="white"
+              style={styles.icon}
+              onPress={() => handleShowDetail(!visible, selectedRoutine)}
+            />
             <Text style={styles.title}>{title}</Text>
           </View>
           <View style={styles.mainContainer}>
@@ -202,7 +232,13 @@ class Detail extends React.Component {
                     <Text style={styles.history}>History</Text>
                   </View>
                   <View style={styles.historyRight}>
-                    <Feather name="edit" size={20} color="#ccc" style={styles.icon} onPress={setProgressModalVisible} />
+                    <Feather
+                      name="edit"
+                      size={20}
+                      color="#ccc"
+                      style={styles.icon}
+                      onPress={setProgressModalVisible}
+                    />
                   </View>
                 </View>
                 <View style={styles.historyViewContainer}>
@@ -226,7 +262,11 @@ class Detail extends React.Component {
               </View>
             </View>
             <View>
-              <Button color="#111" title="DELETE" onPress={() => deleteRoutine(selectedRoutine.key)} />
+              <Button
+                color="#111"
+                title="DELETE"
+                onPress={() => deleteRoutine(selectedRoutine.key)}
+              />
             </View>
           </View>
         </View>
@@ -234,29 +274,5 @@ class Detail extends React.Component {
     );
   }
 }
-
-Detail.defaultProps = {
-  handleShowDetail: null,
-  visible: false,
-  selectedRoutine: null,
-  setProgressModalVisible: false,
-  deleteRoutine: null,
-};
-
-Detail.propTypes = {
-  handleShowDetail: PropTypes.func,
-  visible: PropTypes.bool,
-  setProgressModalVisible: PropTypes.func,
-  deleteRoutine: PropTypes.func,
-  selectedRoutine: PropTypes.shape({
-    item: PropTypes.shape({
-      name: PropTypes.string,
-      count: PropTypes.number,
-      progress: PropTypes.array,
-      key: PropTypes.string,
-      createdAt: PropTypes.string,
-    }),
-  }),
-};
 
 export default Detail;
