@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import { connect } from 'react-redux';
 import {
   StyleSheet,
   Text,
@@ -7,6 +7,14 @@ import {
   Modal,
   TouchableWithoutFeedback,
 } from 'react-native';
+
+import {
+  toggleSortScreen,
+  sortByCompleted,
+  sortByCreated,
+  sortByName,
+} from '../../actions/routines';
+import { StateTypes } from '../../common/types';
 
 const styles = StyleSheet.create({
   modalContainer: {
@@ -52,63 +60,67 @@ const styles = StyleSheet.create({
   },
 });
 
-const Sort = (props) => {
-  const {
-    visible,
-    handleVisible,
-    sortByCompleted,
-    sortByCreated,
-    sortByName,
-  } = props;
-  return (
-    <Modal visible={visible} onRequestClose={() => {}} transparent animationType="fade">
-      <TouchableWithoutFeedback onPress={handleVisible}>
-        <View style={styles.modalContainer}>
-          <TouchableWithoutFeedback onPress={() => {}}>
-            <View style={styles.innerContainer}>
-              <TouchableWithoutFeedback onPress={sortByCompleted}>
-                <View
-                  style={styles.sortContainer}
-                >
-                  <Text style={styles.sortText}>Completed</Text>
-                </View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={sortByCreated}>
-                <View
-                  style={styles.sortContainer}
-                >
-                  <Text style={styles.sortText}>Created</Text>
-                </View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={sortByName}>
-                <View
-                  style={styles.sortContainer}
-                >
-                  <Text style={styles.sortText}>Name</Text>
-                </View>
-              </TouchableWithoutFeedback>
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </TouchableWithoutFeedback>
-    </Modal>
-  );
+interface PropTypes {
+  sortScreenVisible: boolean;
+  sortByCompleted: () => void;
+  sortByCreated: () => void;
+  sortByName: () => void;
+}
+
+class Sort extends React.Component<PropTypes> {
+  render() {
+    return (
+      <Modal
+        visible={false}
+        onRequestClose={() => {}}
+        transparent animationType="fade"
+      >
+        <TouchableWithoutFeedback onPress={() => {}}>
+          <View style={styles.modalContainer}>
+            <TouchableWithoutFeedback onPress={() => {}}>
+              <View style={styles.innerContainer}>
+                <TouchableWithoutFeedback onPress={() => this.props.sortByCompleted}>
+                  <View
+                    style={styles.sortContainer}
+                  >
+                    <Text style={styles.sortText}>Completed</Text>
+                  </View>
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => this.props.sortByCreated}>
+                  <View
+                    style={styles.sortContainer}
+                  >
+                    <Text style={styles.sortText}>Created</Text>
+                  </View>
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => this.props.sortByName}>
+                  <View
+                    style={styles.sortContainer}
+                  >
+                    <Text style={styles.sortText}>Name</Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    );
+  }
+}
+
+const mapStateToProps = (state: StateTypes) => {
+  return ({
+  });
 };
 
-Sort.defaultProps = {
-  handleVisible: null,
-  visible: false,
-  sortByCreated: null,
-  sortByCompleted: false,
-  sortByName: null,
+const mapDispatchToProps = (dispatch: any) => {
+  return ({
+    toggleSortScreen: (visible: boolean) => dispatch(toggleSortScreen(visible)),
+    sortByCompleted: () => dispatch(sortByCompleted()),
+    sortByCreated: () => dispatch(sortByCreated()),
+    sortByName: () => dispatch(sortByName()),
+  });
 };
 
-Sort.propTypes = {
-  handleVisible: PropTypes.func,
-  visible: PropTypes.bool,
-  sortByCompleted: PropTypes.func,
-  sortByName: PropTypes.func,
-  sortByCreated: PropTypes.func,
-};
-
-export default Sort;
+export default connect(mapStateToProps, mapDispatchToProps)(Sort);

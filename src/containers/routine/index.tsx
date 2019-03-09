@@ -4,10 +4,13 @@ import {
   View,
   FlatList,
   StatusBar,
+  AsyncStorage
 } from 'react-native';
 import { connect } from 'react-redux';
 
-import Header from '../../components/Header';
+import { StateTypes, RoutineTypes } from '../../common/types';
+
+import Header from './Header';
 import DateBar from '../../components/DateBar';
 import AddRoutine from './AddRoutine';
 import Sort from '../../components/modals/Sort';
@@ -16,9 +19,7 @@ import RenderRoutine from '../../components/flatlists/RenderRoutine';
 import Detail from '../../components/modals/Detail';
 
 import {
-  setInputModalVisible,
   setDetailModalVisible,
-  setSortModalVisible,
   setProgressModalVisible,
   addRoutine, deleteRoutine,
   updateProgress,
@@ -66,19 +67,6 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 });
-
-interface ProgressTypes {
-  count: number;
-  date: string;
-}
-
-interface RoutineTypes {
-  name: string;
-  count: number;
-  progress: Array<ProgressTypes>;
-  key: string;
-  createdAt: string;
-}
 
 interface PropTypes {
   routines: Array<RoutineTypes>;
@@ -144,34 +132,6 @@ interface PropTypes {
   };
 }
 
-interface StateTypes {
-  _persist: {
-    rehydrated: boolean;
-    version: number;
-  };
-  lists: {
-    createListVisible: boolean,
-    tasks: [],
-  };
-  routines: {
-    routines: Array<RoutineTypes>;
-    count: number;
-    detailModalVisible: boolean;
-    inputModalVisible: boolean;
-    sortModalVisible: boolean;
-    name: string;
-    progressModalVisible: boolean;
-    selectedRoutine: RoutineTypes;
-  };
-  users: {
-    email: string;
-    errorMessage: object;
-    isLoading: boolean;
-    password: string;
-    uid: string;
-  };
-}
-
 class Routine extends React.Component<PropTypes> {
   handleSetInputModalVisible = (): void => {
     const { setInputModalVisible: handleSetInputModalVisible, inputModalVisible } = this.props;
@@ -217,74 +177,10 @@ class Routine extends React.Component<PropTypes> {
   }
 
   render() {
-    const {
-      inputModalVisible: _inputModalVisible,
-      setInputModalVisible: _setInputModalVisible,
-      sortModalVisible: _sortModalVisible,
-      setSortModalVisible: _setSortModalVisible,
-      routines,
-      sortByName: _sortByName,
-      sortByCreated: _sortByCreated,
-      sortByCompleted: _sortByCompleted,
-      detailModalVisible,
-      setProgressModalVisible: _setProgressModalVisible,
-      progressModalVisible: _progressModalVisible,
-      selectedRoutine: _selectedRoutine,
-      inputModalVisible,
-    } = this.props;
     return (
       <View style={styles.homeContainer}>
-        <Header
-          inputModalVisible={_inputModalVisible}
-          setInputModalVisible={_setInputModalVisible}
-          sortModalVisible={_sortModalVisible}
-          setSortModalVisible={_setSortModalVisible}
-        />
+
         <DateBar />
-        <View style={styles.mainContainer}>
-          <FlatList
-            style={styles.listContainer}
-            data={routines}
-            renderItem={routine => (
-              <RenderRoutine
-                routine={routine}
-                handleProgress={this.setProgress}
-                handleShowDetail={this.handleSetDetailModalVisible}
-                visible={detailModalVisible}
-              />
-            )}
-          />
-        </View>
-        <Sort
-          visible={_sortModalVisible}
-          handleVisible={() => _setSortModalVisible(!_sortModalVisible)}
-          sortByName={() => _sortByName()}
-          sortByCreated={() => _sortByCreated()}
-          sortByCompleted={() => _sortByCompleted()}
-        />
-        <AddRoutine
-          visible={_inputModalVisible}
-          handleVisible={() => _setInputModalVisible(!_inputModalVisible)}
-          createRoutine={this.addRoutine}
-        />
-        <Detail
-          visible={detailModalVisible}
-          handleShowDetail={this.handleSetDetailModalVisible}
-          setProgressModalVisible={
-            () => _setProgressModalVisible(!_progressModalVisible)
-          }
-          selectedRoutine={_selectedRoutine}
-          deleteRoutine={this.deleteRoutine}
-          handleVisible={() => _setInputModalVisible(!inputModalVisible)}
-        />
-        <Progress
-          visible={_progressModalVisible}
-          selectedRoutine={_selectedRoutine}
-          setProgressModalVisible={
-            () => _setProgressModalVisible(!_progressModalVisible)
-          }
-          completeProgress={this.completeProgress}
-        />
       </View>
     );
   }
@@ -292,13 +188,6 @@ class Routine extends React.Component<PropTypes> {
 
 const mapStateToProps = (state: StateTypes) => {
   return ({
-    uid: state.users.uid,
-    routines: state.routines.routines,
-    inputModalVisible: state.routines.inputModalVisible,
-    detailModalVisible: state.routines.detailModalVisible,
-    sortModalVisible: state.routines.sortModalVisible,
-    progressModalVisible: state.routines.progressModalVisible,
-    selectedRoutine: state.routines.selectedRoutine,
   });
 };
 
@@ -322,12 +211,10 @@ const mapDispatchToProps = (dispatch: any) => ({
     routines: Array<RoutineTypes>,
     uid: string,
   ) => dispatch(completeProgress(key, date, routines, uid)),
-  setInputModalVisible: (visible: boolean) => dispatch(setInputModalVisible(visible)),
   setDetailModalVisible: (
     visible: boolean,
     routine: RoutineTypes,
   ) => dispatch(setDetailModalVisible(visible, routine)),
-  setSortModalVisible: (visible: boolean) => dispatch(setSortModalVisible(visible)),
   setProgressModalVisible: (visible: boolean) => dispatch(setProgressModalVisible(visible)),
   sortByName: () => dispatch(sortByName()),
   sortByCreated: () => dispatch(sortByCreated()),

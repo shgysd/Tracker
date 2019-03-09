@@ -1,7 +1,7 @@
 import {
-  SET_INPUT_MODAL_VISIBLE,
+  TOGGLE_CREATE_SCREEN,
+  TOGGLE_SORT_SCREEN,
   SET_DETAIL_MODAL_VISIBLE,
-  SET_SORT_MODAL_VISIBLE,
   SET_PROGRESS_MODAL_VISIBLE,
   ADD_ROUTINE,
   DELETE_ROUTINE,
@@ -20,29 +20,25 @@ import {
   SORT_BY_CREATED,
   SORT_BY_COMPLETED,
 } from '../consistants/actionTypes';
+import {
+  ToggleScreen,
+  RoutineTypes,
+} from '../common/types';
 
-// interface RoutineTypes {
-// TODO
-// }
-
-// interface ErrorTypes {
-// TODO
-// }
-
-export const setInputModalVisible = (visible: boolean) => ({
+export const toggleCreateScreen = (visible: boolean): ToggleScreen => ({
   visible,
-  type: SET_INPUT_MODAL_VISIBLE,
+  type: TOGGLE_CREATE_SCREEN,
 });
 
-export const setDetailModalVisible = (visible: boolean, routine: any) => ({
+export const toggleSortScreen = (visible: boolean): ToggleScreen => ({
+  visible,
+  type: TOGGLE_SORT_SCREEN,
+});
+
+export const setDetailModalVisible = (visible: boolean, routine: RoutineTypes) => ({
   visible,
   routine,
   type: SET_DETAIL_MODAL_VISIBLE,
-});
-
-export const setSortModalVisible = (visible: boolean) => ({
-  visible,
-  type: SET_SORT_MODAL_VISIBLE,
 });
 
 export const setProgressModalVisible = (visible: boolean) => ({
