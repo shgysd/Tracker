@@ -72,3 +72,4 @@ RNTester/build
 
 src/configs/firebase.js
 .expo/packager-info.json
+.expo/settings.json
