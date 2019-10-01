@@ -4,46 +4,21 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "eject": "expo eject",
-    "test": "npm run tslint && npm run tsc-test && npm run jest",
-    "tslint": "tslint --project .",
-    "tsc-test": "tsc --project . --noEmit",
-    "jest": "jest"
+    "web": "expo start --web",
+    "eject": "expo eject"
   },
   "dependencies": {
-    "@expo/vector-icons": "^9.0.0",
-    "expo": "^32.0.0",
-    "firebase": "^5.8.2",
-    "moment": "^2.24.0",
-    "react": "16.5.0",
-    "react-dom": "^16.8.4",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
-    "react-native-progress": "^3.5.0",
-    "react-navigation": "^3.1.2",
-    "react-redux": "^6.0.0",
-    "redux": "^4.0.1",
-    "redux-persist": "^5.10.0",
-    "redux-saga": "^1.0.1"
+    "expo": "^35.0.0",
+    "react": "16.8.3",
+    "react-dom": "16.8.3",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",
+    "react-native-web": "^0.11.7"
   },
   "devDependencies": {
-    "@types/enzyme": "^3.9.0",
-    "@types/expo__vector-icons": "^9.0.1",
-    "@types/jest": "^24.0.9",
-    "@types/react": "^16.8.3",
-    "@types/react-dom": "^16.8.2",
-    "@types/react-native": "^0.57.36",
-    "@types/react-navigation": "^3.0.4",
-    "@types/react-redux": "^7.0.1",
-    "enzyme": "^3.9.0",
-    "enzyme-adapter-react-16": "^1.10.0",
-    "enzyme-to-json": "^3.3.5",
-    "jest": "^24.1.0",
-    "jest-enzyme": "^7.0.1",
-    "jest-expo": "^32.0.0",
-    "ts-jest": "^24.0.0",
-    "tslint": "^5.12.1",
-    "tslint-config-airbnb": "^5.11.1",
-    "typescript": "^3.3.3"
+    "@types/react": "^16.8.23",
+    "@types/react-native": "^0.57.65",
+    "babel-preset-expo": "^7.0.0",
+    "typescript": "^3.4.5"
   },
   "private": true
 }

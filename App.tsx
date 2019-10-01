@@ -1,22 +1,19 @@
-import * as React from 'react';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
-import configureStore from './src/store/configureStore';
-import Routine from './src/containers/Routine';
-
-console.disableYellowBox = true;
-
-const { store, persistor } = configureStore();
-
-const App = () => {
+export default function App() {
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <Routine />
-      </PersistGate>
-    </Provider>
+    <View style={styles.container}>
+      <Text>Open up App.tsx to start working on your app!</Text>
+    </View>
   );
-};
+}
 
-export default App;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
